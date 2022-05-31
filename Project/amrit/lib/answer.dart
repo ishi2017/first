@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class Answer extends StatelessWidget {
@@ -11,10 +13,16 @@ class Answer extends StatelessWidget {
       width: double.infinity,
       color: Colors.blue,
       child: RaisedButton(
-        child: Text(this.ans),
+        child: Text(
+          this.ans,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         onPressed: selectHandler,
-        color: Colors.red,
-        textColor: Colors.orange,
+        color: Colors.green,
+        textColor: Colors.black,
       ),
     );
   }

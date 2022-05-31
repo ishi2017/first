@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './Question.dart';
-import './answer.dart';
+import 'package:flutter_complete_guide/Quiz.dart';
+import 'package:flutter_complete_guide/result.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,30 +12,54 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  var totalScore = 0;
   var QuestionNo = 0;
   var Questions = const [
     {
       'Ques': 'Which one is your favourit Animal ?',
-      'Ans': ['cat', 'Dog', 'Mouse', 'Rat']
+      'Ans': [
+        {'text': 'cat', 'score': 1},
+        {'text': 'Dog', 'score': 2},
+        {'text': 'Fly', 'score': 3},
+        {'text': 'Rat', 'score': 5}
+      ]
     },
     {
       'Ques': 'Which one is your favourit Movie ?',
-      'Ans': ['DDLJ', 'Kabhi Khushi Kabhi Gam', 'Ram Jame', 'DON']
+      'Ans': [
+        {'text': 'DDLJ', 'score': 1},
+        {'text': 'Kabhi Khushi Kabhi Gam', 'score': 2},
+        {'text': 'Ram Jame', 'score': 4},
+        {'text': 'DON', 'score': 3}
+      ]
     },
     {
       'Ques': 'Which one is your favourite Teacher ?',
-      'Ans': ['Ram', 'Shayam', 'Nikhil', 'Saroj']
+      'Ans': [
+        {'text': 'Ram', 'score': 1},
+        {'text': 'Shayam', 'score': 4},
+        {'text': 'Nikhil', 'score': 5},
+        {'text': 'Saroj', 'score': 3}
+      ]
     },
   ];
-  void answerQuestion() {
+  void reset() {
     setState(() {
+      totalScore = 0;
+      QuestionNo = 0;
+    });
+  }
+
+  void answerQuestion(int score) {
+    setState(() {
+      totalScore += score;
       print(QuestionNo);
 
       QuestionNo += 1;
 
-      if (QuestionNo == 3) {
-        QuestionNo = 0;
-      }
+      // if (QuestionNo == 3) {
+      //   QuestionNo = 0;
+      // }
     });
   }
 
@@ -49,17 +73,15 @@ class MyAppState extends State<MyApp> {
           style: TextStyle(fontSize: 22),
           textAlign: TextAlign.center,
         )),
-        body: Column(
-          children: [
-            Question('Que No::' +
-                QuestionNo.toString() +
-                '\t' +
-                Questions[QuestionNo]['Ques'].toString()),
-            ...(Questions[QuestionNo]['Ans'] as List<String>).map((ans) {
-              return Answer(answerQuestion, ans);
-            }),
-          ],
-        ),
+        body: QuestionNo <= 2
+            ? Quiz(
+                QuestionNo: QuestionNo,
+                Questions: Questions,
+                answerQuestion: answerQuestion)
+            : result(
+                totalScore: totalScore,
+                reset: reset,
+              ),
       ),
     );
   }
