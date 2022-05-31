@@ -18,7 +18,7 @@ class MyAppState extends State<MyApp> {
     {
       'Ques': 'Which one is your favourit Animal ?',
       'Ans': [
-        {'text': 'Elephant', 'score': 1},
+        {'text': 'Cat', 'score': 1},
         {'text': 'Dog', 'score': 2},
         {'text': 'Fly', 'score': 3},
         {'text': 'Rat', 'score': 5}
