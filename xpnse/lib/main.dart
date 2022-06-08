@@ -24,27 +24,28 @@ class MyHomePage extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-      body: // SingleChildScrollView(child:
-          Column(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            color: Colors.purple,
-            child: Card(
-              child: Text(
-                ' Xpanse Manager ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontFamily: 'Rockwell',
-                ),
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              width: double.infinity,
               color: Colors.purple,
+              child: Card(
+                child: Text(
+                  ' Xpanse Manager ',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Rockwell',
+                  ),
+                ),
+                color: Colors.purple,
+              ),
             ),
-          ),
-          NewTransaction(),
-        ],
+            NewTransaction(),
+          ],
+        ),
       ),
     );
   }

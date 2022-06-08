@@ -17,7 +17,9 @@ class MyNewTransaction extends State<NewTransaction> {
       amount: newAmount,
       date: DateTime.now(),
     );
-    transactions.add(newtx);
+    setState(() {
+      transactions.add(newtx);
+    });
   }
 
   final List<Transaction> transactions = [
@@ -30,6 +32,22 @@ class MyNewTransaction extends State<NewTransaction> {
   // String inputTitle, inputAmount;
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  void submit() {
+    String enteredTitle = titleController.text;
+    double enteredAmount = double.parse(amountController.text);
+    print(enteredTitle);
+    print(enteredAmount);
+
+    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+      return;
+    }
+    titleController.text = '';
+    amountController.text = '';
+    addTx(
+      newTitle: enteredTitle,
+      newAmount: enteredAmount,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +64,8 @@ class MyNewTransaction extends State<NewTransaction> {
                 labelText: 'Title',
               ),
               controller: titleController,
+              keyboardType: TextInputType.name,
+              onSubmitted: (_) => submit(),
               // onChanged: (val) {
               //   inputTitle = val;
               // },
@@ -56,6 +76,8 @@ class MyNewTransaction extends State<NewTransaction> {
             child: TextField(
               decoration: InputDecoration(labelText: 'Amount'),
               controller: amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => submit(),
               // onChanged: (val) {
               //   inputAmount = val;
               // },
@@ -66,18 +88,11 @@ class MyNewTransaction extends State<NewTransaction> {
               'Add Transaction',
               style: TextStyle(color: Colors.purple),
             ),
-            onPressed: () {
-              setState(() {
-                addTx(
-                  newTitle: titleController.text,
-                  newAmount: double.parse(amountController.text),
-                );
-              });
-              // print(titleController.text);
-              // print(amountController.text);
-              // print(inputTitle);
-              // print(inputAmount);
-            },
+            onPressed: submit,
+            // print(titleController.text);
+            // print(amountController.text);
+            // print(inputTitle);
+            // print(inputAmount);
           ),
           TransactionList(this.transactions),
         ],
