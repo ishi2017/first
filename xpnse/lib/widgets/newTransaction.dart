@@ -35,14 +35,10 @@ class MyNewTransaction extends State<NewTransaction> {
   void submit() {
     String enteredTitle = titleController.text;
     double enteredAmount = double.parse(amountController.text);
-    print(enteredTitle);
-    print(enteredAmount);
 
     if (enteredTitle.isEmpty || enteredAmount <= 0) {
       return;
     }
-    titleController.text = '';
-    amountController.text = '';
     addTx(
       newTitle: enteredTitle,
       newAmount: enteredAmount,
