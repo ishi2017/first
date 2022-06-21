@@ -1,72 +1,93 @@
 import 'package:flutter/material.dart';
-import '../Module/Transaction.dart';
 import 'package:intl/intl.dart';
+
+import '../Module/Transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+
   TransactionList(this.transactions);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 5,
-            color: Colors.lightBlue,
-            shadowColor: Colors.amber,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      height: 500,
+      child: transactions.isEmpty
+          ? Column(
               children: [
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 5,
-                  ),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.purple,
-                      width: 2,
-                    ),
-                  ),
-                  child: Text(
-                    '\$${transactions[index].amount.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontFamily: 'Rockwell',
-                      fontSize: 20,
-                      color: Colors.purple,
-                    ),
-                  ),
+                Text(
+                  "No Existing Transaction",
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      transactions[index].title,
-                      style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 15,
-                        fontFamily: 'Rockwell',
-                      ),
-                    ),
-                    Text(
-                      // DateFormat('yyyy-MM-dd').format(e.date),
-                      DateFormat.yMMMd().format(transactions[index].date),
-                      style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 15,
-                        fontFamily: 'Rockwell',
-                      ),
-                    ),
-                  ],
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 350,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ],
+            )
+          : ListView.builder(
+              itemBuilder: (ctx, index) {
+                return Card(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 15,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Theme.of(context).primaryColorLight,
+                            width: 2,
+                          ),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          '\$${transactions[index].amount.toStringAsFixed(2)}',
+                          //style: Theme.of(context).textTheme.headline6,
+
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            transactions[index].title,
+                            style: Theme.of(context).textTheme.headline6,
+
+                            // style:
+                            //     TextStyle(color: Theme.of(context).primaryColorDark),
+
+                            // style: TextStyle(
+                            //   fontSize: 16,
+                            //   fontWeight: FontWeight.bold,
+                            //   color: Theme.of(context).primaryColorDark,
+                            // ),
+                          ),
+                          Text(
+                            DateFormat.yMMMd().format(transactions[index].date),
+                            style: Theme.of(context).textTheme.headline6,
+                            // style:
+                            //     TextStyle(color: Theme.of(context).primaryColorDark),
+                            // style: TextStyle(
+                            //   color: Theme.of(context).primaryColorDark,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+              itemCount: transactions.length,
             ),
-          );
-        },
-        itemCount: transactions.length,
-      ),
     );
   }
 }
