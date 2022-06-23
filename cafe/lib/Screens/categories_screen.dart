@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './dummy_data.dart';
+import '../dummy_data.dart';
 import './category_meal_screen.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -27,11 +27,13 @@ class CategoriesScreen extends StatelessWidget {
               //   ),
               // );
 
-              Navigator.of(context).pushNamed('/Category_Meal', arguments: {
-                'id': DUMMY_CATEGORIES[index].id,
-                'title': DUMMY_CATEGORIES[index].title,
-                'color': DUMMY_CATEGORIES[index].color,
-              });
+              Navigator.of(context).pushNamed(
+                  CategoryMealScreen.CategoryMealScreenArguments,
+                  arguments: {
+                    'id': DUMMY_CATEGORIES[index].id,
+                    'title': DUMMY_CATEGORIES[index].title,
+                    'color': DUMMY_CATEGORIES[index].color,
+                  });
             },
             splashColor: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(15),

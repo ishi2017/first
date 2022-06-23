@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './category_meal_screen.dart';
-import './categories_screen.dart';
+import './Screens/category_meal_screen.dart';
+import './Screens/categories_screen.dart';
+import './Screens/meal_detail_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,8 +18,12 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Raleway',
         textTheme: ThemeData.light().textTheme.copyWith(
             bodyText1: TextStyle(
-                fontSize: 15, fontFamily: 'RobotoCondensed', color: Colors.red),
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                fontFamily: 'RobotoCondensed',
+                color: Colors.red),
             bodyText2: TextStyle(
+                fontWeight: FontWeight.bold,
                 fontSize: 20,
                 fontFamily: 'RobotoCondensed',
                 color: Colors.purple),
@@ -29,9 +34,20 @@ class MyApp extends StatelessWidget {
               color: Colors.black87,
             )),
       ),
-      home: const CategoriesScreen(),
+      //home: const CategoriesScreen(),
+      initialRoute: '/',
       routes: {
-        '/Category_Meal': (context) => CategoryMealScreen(),
+        '/': ((context) => const CategoriesScreen()),
+        CategoryMealScreen.CategoryMealScreenArguments: (context) =>
+            CategoryMealScreen(),
+        MealDetail.MealDetailRoute: (context) => MealDetail(),
+      },
+      onGenerateRoute: (setting) {
+        print(setting.arguments);
+        return MaterialPageRoute(builder: (context) => CategoriesScreen());
+      },
+      onUnknownRoute: (setting) {
+        return MaterialPageRoute(builder: (context) => CategoriesScreen());
       },
     );
   }
