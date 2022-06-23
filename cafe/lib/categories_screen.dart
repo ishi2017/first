@@ -15,13 +15,23 @@ class CategoriesScreen extends StatelessWidget {
         children: List.generate(DUMMY_CATEGORIES.length, (index) {
           return InkWell(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (c) {
-                return CategoryMealScreen(
-                  id: DUMMY_CATEGORIES[index].id,
-                  categoryTitle: DUMMY_CATEGORIES[index].title,
-                  color: DUMMY_CATEGORIES[index].color,
-                );
-              }));
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (c) {
+              //       return CategoryMealScreen(
+              //         id: DUMMY_CATEGORIES[index].id,
+              //         categoryTitle: DUMMY_CATEGORIES[index].title,
+              //         color: DUMMY_CATEGORIES[index].color,
+              //       );
+              //     },
+              //   ),
+              // );
+
+              Navigator.of(context).pushNamed('/Category_Meal', arguments: {
+                'id': DUMMY_CATEGORIES[index].id,
+                'title': DUMMY_CATEGORIES[index].title,
+                'color': DUMMY_CATEGORIES[index].color,
+              });
             },
             splashColor: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(15),
