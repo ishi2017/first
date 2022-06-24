@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/main.dart';
 import '../Models/meals.dart';
 import '../Screens/meal_detail_screen.dart';
 
-class MealItem extends StatelessWidget {
+class MealItem extends StatefulWidget {
   final Function removeFromList;
   final String id;
   final String title;
@@ -10,6 +11,7 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
+  final Meal completeMealElement;
 
   const MealItem({
     Key key,
@@ -20,10 +22,27 @@ class MealItem extends StatelessWidget {
     @required this.complexity,
     @required this.affordability,
     @required this.removeFromList,
+    @required this.completeMealElement,
   }) : super(key: key);
 
+  @override
+  State<MealItem> createState() => _MealItemState();
+}
+
+class _MealItemState extends State<MealItem> {
+  bool isFavourite;
+  @override
+  void initState() {
+    if (MyApp.favMeal.contains(widget.completeMealElement)) {
+      isFavourite = true;
+    } else {
+      isFavourite = false;
+    }
+    super.initState();
+  }
+
   String get ComplexityInfo {
-    switch (complexity) {
+    switch (widget.complexity) {
       case Complexity.Simple:
         {
           return 'Simple';
@@ -44,7 +63,7 @@ class MealItem extends StatelessWidget {
   }
 
   String get AffordabilityInfo {
-    switch (affordability) {
+    switch (widget.affordability) {
       case Affordability.Affordable:
         {
           return 'Affordable';
@@ -66,8 +85,20 @@ class MealItem extends StatelessWidget {
 
   void goToMealDetail(BuildContext context) {
     Navigator.of(context).pushNamed(MealDetail.RouteName,
-        arguments: {'id': id}).then((selectedMealId) {
-      removeFromList(selectedMealId);
+        arguments: {'id': widget.id}).then((selectedMealId) {
+      widget.removeFromList(selectedMealId);
+    });
+  }
+
+  void changeState(String id) {
+    setState(() {
+      if (isFavourite) {
+        MyApp.favMeal.remove(widget.completeMealElement);
+        isFavourite = false;
+      } else {
+        MyApp.favMeal.add(widget.completeMealElement);
+        isFavourite = true;
+      }
     });
   }
 
@@ -92,7 +123,7 @@ class MealItem extends StatelessWidget {
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15)),
                   child: Image.network(
-                    imageUrl,
+                    widget.imageUrl,
                     height: 250,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -106,14 +137,34 @@ class MealItem extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     color: Colors.black54,
                     child: Text(
-                      title,
+                      widget.title,
                       style: TextStyle(fontSize: 20, color: Colors.white),
                       softWrap: true,
                       overflow: TextOverflow.fade,
                       textAlign: TextAlign.right,
                     ),
                   ),
-                )
+                ),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: InkWell(
+                    onTap: () => changeState(widget.id),
+                    splashColor: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                    child: isFavourite
+                        ? Icon(
+                            Icons.star,
+                            size: 50,
+                            color: Colors.amber,
+                          )
+                        : Icon(
+                            Icons.star_border_outlined,
+                            size: 50,
+                            color: Colors.purple,
+                          ),
+                  ),
+                ),
               ],
             ),
             Padding(
@@ -125,7 +176,7 @@ class MealItem extends StatelessWidget {
                     children: [
                       Icon(Icons.schedule),
                       SizedBox(width: 5.0),
-                      Text('$duration')
+                      Text('${widget.duration}')
                     ],
                   ),
                   Row(

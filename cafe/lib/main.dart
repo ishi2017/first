@@ -11,15 +11,18 @@ import './Models/meals.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+  static List<Meal> favMeal = [];
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   List<Meal> availableMeals;
+
   @override
   void initState() {
     availableMeals = DUMMY_MEALS;
+
     super.initState();
   }
 
@@ -82,7 +85,9 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         // '/': ((context) => const CategoriesScreen()),
-        '/': ((context) => TabsScreen()),
+        '/': ((context) => TabsScreen(
+              favMeal: MyApp.favMeal,
+            )),
 
         CategoryMealScreen.RouteName: (context) => CategoryMealScreen(
               availableMeal: availableMeals,
@@ -94,7 +99,10 @@ class _MyAppState extends State<MyApp> {
             ))
       },
       onGenerateRoute: (setting) {
-        return MaterialPageRoute(builder: (context) => TabsScreen());
+        return MaterialPageRoute(
+            builder: (context) => TabsScreen(
+                  favMeal: MyApp.favMeal,
+                ));
       },
       onUnknownRoute: (setting) {
         return MaterialPageRoute(builder: (context) => CategoriesScreen());

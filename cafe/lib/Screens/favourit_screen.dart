@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import '../Screens/category_meal_screen.dart';
+import '../Models/meals.dart';
 
 class FavouritScreen extends StatelessWidget {
   static final String RouteName = '/FavScreen';
-  const FavouritScreen({Key key}) : super(key: key);
+  final List<Meal> favMeal;
+  const FavouritScreen({Key key, this.favMeal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('This is my Favourit Page'),
+    return CategoryMealScreen(
+      availableMeal: favMeal,
+      isFavCase: true,
     );
   }
 }
