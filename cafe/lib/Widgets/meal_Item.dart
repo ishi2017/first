@@ -3,6 +3,7 @@ import '../Models/meals.dart';
 import '../Screens/meal_detail_screen.dart';
 
 class MealItem extends StatelessWidget {
+  final Function removeFromList;
   final String id;
   final String title;
   final String imageUrl;
@@ -10,15 +11,16 @@ class MealItem extends StatelessWidget {
   final Complexity complexity;
   final Affordability affordability;
 
-  const MealItem(
-      {Key key,
-      @required this.id,
-      @required this.title,
-      @required this.imageUrl,
-      @required this.duration,
-      @required this.complexity,
-      @required this.affordability})
-      : super(key: key);
+  const MealItem({
+    Key key,
+    @required this.id,
+    @required this.title,
+    @required this.imageUrl,
+    @required this.duration,
+    @required this.complexity,
+    @required this.affordability,
+    @required this.removeFromList,
+  }) : super(key: key);
 
   String get ComplexityInfo {
     switch (complexity) {
@@ -63,8 +65,10 @@ class MealItem extends StatelessWidget {
   }
 
   void goToMealDetail(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(MealDetail.MealDetailRoute, arguments: {'id': id});
+    Navigator.of(context).pushNamed(MealDetail.RouteName,
+        arguments: {'id': id}).then((selectedMealId) {
+      removeFromList(selectedMealId);
+    });
   }
 
   @override

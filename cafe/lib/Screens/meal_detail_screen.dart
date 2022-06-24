@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../dummy_data.dart';
 
 class MealDetail extends StatelessWidget {
-  static final MealDetailRoute = '/meal_detail';
+  static final RouteName = '/meal_detail';
   const MealDetail({Key key}) : super(key: key);
 
   Widget buidMyContainer(BuildContext context, List<String> myList) {
@@ -77,6 +77,13 @@ class MealDetail extends StatelessWidget {
             buidMyContainer(context, idMeal.steps),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.delete),
+        backgroundColor: Theme.of(context).accentColor,
+        onPressed: () {
+          Navigator.of(context).pop(idMeal.id);
+        },
       ),
     );
   }
