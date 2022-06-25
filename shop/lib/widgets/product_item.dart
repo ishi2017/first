@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../screens/product_detail.dart';
-import '../database/data.dart';
-import '../models/product.dart';
 
 class ProductItems extends StatelessWidget {
   static String routeName = '/product-item';
 
   final String id;
-  const ProductItems({Key key, this.id}) : super(key: key);
-
-  Product get product {
-    final value = loadedProducts.where((element) => element.id == id);
-    return value.first;
-  }
+  final String title;
+  final String imageUrl;
+  const ProductItems({
+    Key key,
+    this.id,
+    this.title,
+    this.imageUrl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ProductItems extends StatelessWidget {
         },
         child: GridTile(
           child: Image.network(
-            product.imageUrl,
+            imageUrl,
             fit: BoxFit.cover,
           ),
           footer: GridTileBar(
@@ -38,7 +38,7 @@ class ProductItems extends StatelessWidget {
               onPressed: () {},
             ),
             title: Text(
-              product.title,
+              title,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText2,
               softWrap: true,

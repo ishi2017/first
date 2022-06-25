@@ -41,21 +41,21 @@ class MyApp extends StatelessWidget {
                 button: TextStyle(color: Colors.white),
               ),
         ),
-        //home: ProductOverviewScreen(),
-        initialRoute: '/',
+        home: ProductOverviewScreen(),
+        // initialRoute: '/',
         routes: {
-          '/': (context) => ProductOverviewScreen(),
+          // '/': (context) => ProductOverviewScreen(),
           ProductItems.routeName: (context) => ProductItems(),
           ProductDetail.routeName: ((context) => ProductDetail()),
         },
-        onGenerateRoute: (setting) {
-          return MaterialPageRoute(
-              builder: (context) => ProductOverviewScreen());
-        },
-        onUnknownRoute: (setting) {
-          return MaterialPageRoute(
-              builder: (context) => ProductOverviewScreen());
-        },
+        // onGenerateRoute: (setting) {
+        //   return MaterialPageRoute(
+        //       builder: (context) => ProductOverviewScreen());
+        // },
+        // onUnknownRoute: (setting) {
+        //   return MaterialPageRoute(
+        //       builder: (context) => ProductOverviewScreen());
+        // },
       ),
     );
   }

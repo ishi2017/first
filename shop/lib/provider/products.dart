@@ -38,7 +38,7 @@ class Products with ChangeNotifier {
   ];
 
   List<Product> get items {
-    return [...items];
+    return [..._items];
   }
 
   void addProduct() {
