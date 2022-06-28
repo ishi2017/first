@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "890460528771",
+    "firebase_url": "https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "testing-e346e",
+    "storage_bucket": "testing-e346e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890460528771:android:345fbe2730449cb2edfbb6",
+        "android_client_info": {
+          "package_name": "com.amrit.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890460528771-jihaqk0e4vbt7a0p87k0qekb2r661cvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoikIG1Z18jb8XEk364Yl-6ip8JR5cBvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890460528771-jihaqk0e4vbt7a0p87k0qekb2r661cvl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

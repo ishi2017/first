@@ -1,4 +1,3 @@
-import 'package:flutter_complete_guide/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +10,17 @@ import './screens/cart_scree.dart';
 import './provider/order.dart';
 import './screens/order_screen.dart';
 import './screens/edit_product_screen.dart';
+import '../screens/user_product_screen.dart';
 
-void main() => runApp(MyApp());
+// Future main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(MyApp());
+// }
+
+void main(List<String> args) {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
