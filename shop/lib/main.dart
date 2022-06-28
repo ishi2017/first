@@ -1,18 +1,34 @@
+import 'package:flutter_complete_guide/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import '../screens/product_detail.dart';
 
+import '../screens/product_detail.dart';
 import '../screens/product_overview_screen.dart';
 import '../widgets/product_item.dart';
 import './provider/products.dart';
+import './provider/cart.dart';
+import './screens/cart_scree.dart';
+import './provider/order.dart';
+import './screens/order_screen.dart';
+import './screens/edit_product_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Products(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Products(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Orders(),
+        )
+      ],
       child: MaterialApp(
         title: 'MyShop',
         theme: ThemeData(
@@ -41,21 +57,26 @@ class MyApp extends StatelessWidget {
                 button: TextStyle(color: Colors.white),
               ),
         ),
+
         home: ProductOverviewScreen(),
         // initialRoute: '/',
         routes: {
           // '/': (context) => ProductOverviewScreen(),
           ProductItems.routeName: (context) => ProductItems(),
-          ProductDetail.routeName: ((context) => ProductDetail()),
+          ProductDetail.routeName: (context) => ProductDetail(),
+          CartScreen.RouteName: (context) => CartScreen(),
+          OrderedItems.RouteName: (context) => OrderedItems(),
+          UserProductScreen.RouteName: (context) => UserProductScreen(),
+          EditProductScreen.RouteName: (context) => EditProductScreen(),
         },
-        // onGenerateRoute: (setting) {
-        //   return MaterialPageRoute(
-        //       builder: (context) => ProductOverviewScreen());
-        // },
-        // onUnknownRoute: (setting) {
-        //   return MaterialPageRoute(
-        //       builder: (context) => ProductOverviewScreen());
-        // },
+        onGenerateRoute: (setting) {
+          return MaterialPageRoute(
+              builder: (context) => ProductOverviewScreen());
+        },
+        onUnknownRoute: (setting) {
+          return MaterialPageRoute(
+              builder: (context) => ProductOverviewScreen());
+        },
       ),
     );
   }
