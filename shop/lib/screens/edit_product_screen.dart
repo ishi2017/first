@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,20 +53,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (initValue) {
-      final editedProductId =
-          ModalRoute.of(context).settings.arguments as String;
-      if (editedProductId != null) {
-        final editedProduct = Provider.of<Products>(context)
-            .items
-            .firstWhere((element) => element.id == editedProductId);
-        edit['id'] = editedProduct.id;
-        edit['title'] = editedProduct.title;
-        edit['description'] = editedProduct.description;
-        edit['price'] = editedProduct.price.toString();
-        edit['imageUrl'] = editedProduct.imageUrl;
-        edit['isFavourite'] = editedProduct.isFavorite;
-        editing = true;
-        _imageController.text = editedProduct.imageUrl;
+      try {
+        final editedProductId =
+            ModalRoute.of(context).settings.arguments as String;
+
+        if (editedProductId != null) {
+          final editedProduct = Provider.of<Products>(context)
+              .items
+              .firstWhere((element) => element.id == editedProductId);
+          edit['id'] = editedProduct.id;
+          edit['title'] = editedProduct.title;
+          edit['description'] = editedProduct.description;
+          edit['price'] = editedProduct.price.toString();
+          edit['imageUrl'] = editedProduct.imageUrl;
+          edit['isFavourite'] = editedProduct.isFavorite;
+          editing = true;
+          _imageController.text = editedProduct.imageUrl;
+        }
+      } catch (error) {
+        print('Error is there');
       }
     }
 
@@ -84,12 +87,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
-  void saveMyFormState() {
+  Future<void> saveMyFormState() async {
     final validated = _formKey.currentState.validate();
     if (!validated) {
       return;
     }
-
     _formKey.currentState.save();
 
     setState(() {
@@ -107,43 +109,48 @@ class _EditProductScreenState extends State<EditProductScreen> {
         imageUrl: _existingProduct.imageUrl,
         isFavorite: edit['isFavourite'],
       );
-      myProduct.updateProduct(_existingProduct);
-      Navigator.of(context).pop();
-      setState(() {
-        isLoading = false;
-      });
+
+      await myProduct.updateProduct(_existingProduct);
+      // Navigator.of(context).pop();
+      // setState(() {
+      //   isLoading = false;
+      // });
     } else {
-      myProduct
-          .addProduct(_existingProduct)
-          .catchError(
-            (error) => showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text('Error Occured ' + error.toString()),
-                content: Text('Something Went Wrong !'),
-                actions: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                    child: Text('Okay'),
-                  ),
-                ],
+      try {
+        await myProduct.addProduct(_existingProduct);
+      } catch (error) {
+        await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Error Occured '),
+            content: Text('Something Went Wrong !'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Text('Okay'),
               ),
-            ),
-          )
-          .then((error) {
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.of(context).pop();
-      });
+            ],
+          ),
+        );
+      }
+      // finally {
+      //   setState(() {
+      //     isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      // }
     }
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final lastProductId = Provider.of<Products>(context).items.last.id;
+    // final lastProductId = Provider.of<Products>(context).items.last.id;
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Products'),

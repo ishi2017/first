@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import '../provider/auth.dart';
 import '../screens/product_detail.dart';
 import '../screens/product_overview_screen.dart';
 import '../widgets/product_item.dart';
@@ -11,6 +12,7 @@ import './provider/order.dart';
 import './screens/order_screen.dart';
 import './screens/edit_product_screen.dart';
 import '../screens/user_product_screen.dart';
+import '../screens/auth_screen.dart';
 
 // Future main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -28,63 +30,79 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: Products(),
+          value: Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: (context) => Products(null, null, []),
+          update: (cnts, auth, previousItem) => Products(
+              auth.token,
+              auth.userID,
+              previousItem.items == null ? [] : previousItem.items),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
-        ChangeNotifierProvider.value(
-          value: Orders(),
-        )
-      ],
-      child: MaterialApp(
-        title: 'MyShop',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.orange,
-          fontFamily: 'Lato',
-          textTheme: ThemeData.light().textTheme.copyWith(
-                bodyText1: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15,
-                ),
-                bodyText2: TextStyle(
-                  color: Colors.brown,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15,
-                ),
-                headline6: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Anton',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-                button: TextStyle(color: Colors.white),
-              ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (context) => Orders(null, null, []),
+          update: (cnts, auth, previousOrders) => Orders(
+              auth.token,
+              auth.userID,
+              previousOrders.orders == null ? [] : previousOrders.orders),
         ),
+      ],
+      child: Consumer<Auth>(
+        builder: (context, auth, _) => MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.orange,
+            fontFamily: 'Lato',
+            textTheme: ThemeData.light().textTheme.copyWith(
+                  bodyText1: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                  ),
+                  bodyText2: TextStyle(
+                    color: Colors.brown,
+                    fontFamily: 'Anton',
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15,
+                  ),
+                  headline6: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Anton',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                  button: TextStyle(color: Colors.white),
+                ),
+          ),
 
-        home: ProductOverviewScreen(),
-        // initialRoute: '/',
-        routes: {
-          // '/': (context) => ProductOverviewScreen(),
-          ProductItems.routeName: (context) => ProductItems(),
-          ProductDetail.routeName: (context) => ProductDetail(),
-          CartScreen.RouteName: (context) => CartScreen(),
-          OrderedItems.RouteName: (context) => OrderedItems(),
-          UserProductScreen.RouteName: (context) => UserProductScreen(),
-          EditProductScreen.RouteName: (context) => EditProductScreen(),
-        },
-        onGenerateRoute: (setting) {
-          return MaterialPageRoute(
-              builder: (context) => ProductOverviewScreen());
-        },
-        onUnknownRoute: (setting) {
-          return MaterialPageRoute(
-              builder: (context) => ProductOverviewScreen());
-        },
+          // home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) =>
+                auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
+            ProductOverviewScreen.RouteName: (context) =>
+                ProductOverviewScreen(),
+            ProductItems.routeName: (context) => ProductItems(),
+            ProductDetail.routeName: (context) => ProductDetail(),
+            CartScreen.RouteName: (context) => CartScreen(),
+            OrderedItems.RouteName: (context) => OrderedItems(),
+            UserProductScreen.RouteName: (context) => UserProductScreen(),
+            EditProductScreen.RouteName: (context) => EditProductScreen(),
+          },
+          onGenerateRoute: (setting) {
+            return MaterialPageRoute(
+                builder: (context) => ProductOverviewScreen());
+          },
+          onUnknownRoute: (setting) {
+            return MaterialPageRoute(
+                builder: (context) => ProductOverviewScreen());
+          },
+        ),
       ),
     );
   }

@@ -37,8 +37,21 @@ class ProductManagement extends StatelessWidget {
               icon: Icon(Icons.edit),
             ),
             IconButton(
-              onPressed: () {
-                Provider.of<Products>(context, listen: false).removeProduct(id);
+              onPressed: () async {
+                try {
+                  await Provider.of<Products>(context, listen: false)
+                      .removeProduct(id);
+                } catch (Error) {
+                  Scaffold.of(context).hideCurrentSnackBar();
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        Error.toString(),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               },
               icon: Icon(Icons.delete),
             ),

@@ -27,19 +27,7 @@ class CartScreen extends StatelessWidget {
                 Chip(
                   label: Text('${cart.totalAmount}'),
                 ),
-                FlatButton(
-                  onPressed: () {
-                    Provider.of<Orders>(context, listen: false).addOrders(
-                      cart.items.values.toList(),
-                      cart.totalAmount,
-                    );
-                    cart.clearCart();
-                  },
-                  child: Text(
-                    'Place Order',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ),
+                OrderNow(cart: cart),
                 SizedBox(
                   height: 10,
                 ),
@@ -61,6 +49,49 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderNow extends StatefulWidget {
+  const OrderNow({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderNow> createState() => _OrderNowState();
+}
+
+class _OrderNowState extends State<OrderNow> {
+  bool isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: isLoading
+          ? CircularProgressIndicator()
+          : Text(
+              'Order Now',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+      onPressed: (widget.cart.totalAmount <= 0)
+          ? null
+          : () async {
+              setState(() {
+                isLoading = true;
+              });
+
+              await Provider.of<Orders>(context, listen: false).addOrders(
+                widget.cart.items.values.toList(),
+                widget.cart.totalAmount,
+              );
+              setState(() {
+                isLoading = false;
+              });
+              widget.cart.clearCart();
+            },
     );
   }
 }

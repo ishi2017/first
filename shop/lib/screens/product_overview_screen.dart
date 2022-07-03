@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/provider/products.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
@@ -10,11 +11,45 @@ import '../screens/cart_scree.dart';
 enum filters { Favourite, All }
 
 class ProductOverviewScreen extends StatefulWidget {
+  static String RouteName = '/product_overview';
   @override
   State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  bool init = false;
+  bool _isLoading = true;
+  @override
+  void initState() {
+    // Future.delayed(Duration.zero).then(
+    //   (_) => Provider.of<Products>(context, listen: false)
+    //       .fetchData()
+    //       .then((_) => setState(() {
+    //             _isLoading = false;
+    //           })),
+    // );
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!init) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      setState(() {
+        Provider.of<Products>(context, listen: false)
+            .fetchData()
+            .then((_) => setState(() {
+                  _isLoading = false;
+                }));
+      });
+    }
+    init = true;
+    super.didChangeDependencies();
+  }
+
   bool _isFav = false;
   @override
   Widget build(BuildContext context) {
@@ -67,9 +102,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductGrid(
-        isFav: _isFav,
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(
+              isFav: _isFav,
+            ),
     );
   }
 }

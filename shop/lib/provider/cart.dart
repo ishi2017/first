@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/screens/cart_item_screen.dart';
+import '../screens/cart_item_screen.dart';
 
 class CartItem {
   final String id;

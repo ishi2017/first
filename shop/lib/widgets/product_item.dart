@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import 'package:provider/provider.dart';
+import '../provider/products.dart';
 import '../screens/product_detail.dart';
 import '../models/product.dart';
 import '../provider/cart.dart';
+import '../provider/auth.dart';
 
 class ProductItems extends StatelessWidget {
   static String routeName = '/product-item';
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final product = Provider.of<Product>(
       context,
       listen: false,
@@ -46,8 +49,21 @@ class ProductItems extends StatelessWidget {
                         color: Theme.of(context).textTheme.bodyText2.color,
                         size: 22,
                       ),
-                onPressed: () {
-                  product.toggleFavourite();
+                onPressed: () async {
+                  try {
+                    await product.toggleFavourite(
+                        Provider.of<Auth>(context, listen: false));
+
+                    // await Provider.of<Products>(context, listen: false)
+                    //     .updateProduct(product);
+                  } catch (msg) {
+                    product.toggleFavourite(
+                        Provider.of<Auth>(context, listen: false));
+                    scaffold.showSnackBar(SnackBar(
+                      content: Text(msg.toString()),
+                      duration: Duration(seconds: 2),
+                    ));
+                  }
                 },
               ),
             ),
