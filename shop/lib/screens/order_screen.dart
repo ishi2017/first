@@ -13,10 +13,10 @@ class OrderedItems extends StatefulWidget {
 }
 
 class _OrderedItemsState extends State<OrderedItems> {
-  Future _orderFuture;
+  Future<void> _orderFuture;
 
-  Future _obtainOrderFuture() {
-    Provider.of<Orders>(context, listen: false).fetchAndSet();
+  Future<void> _obtainOrderFuture() async {
+    await Provider.of<Orders>(context, listen: false).fetchAndSet();
   }
 
   @override
@@ -27,7 +27,6 @@ class _OrderedItemsState extends State<OrderedItems> {
 
   @override
   Widget build(BuildContext context) {
-    print('Building Orders');
     return Scaffold(
       appBar: AppBar(title: Text('Order Details')),
       drawer: AppDrawer(),

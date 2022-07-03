@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/provider/products.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/auth.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/badge.dart';
@@ -17,36 +18,13 @@ class ProductOverviewScreen extends StatefulWidget {
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
-  bool init = false;
-  bool _isLoading = true;
   @override
   void initState() {
-    // Future.delayed(Duration.zero).then(
-    //   (_) => Provider.of<Products>(context, listen: false)
-    //       .fetchData()
-    //       .then((_) => setState(() {
-    //             _isLoading = false;
-    //           })),
-    // );
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    if (!init) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      setState(() {
-        Provider.of<Products>(context, listen: false)
-            .fetchData()
-            .then((_) => setState(() {
-                  _isLoading = false;
-                }));
-      });
-    }
-    init = true;
     super.didChangeDependencies();
   }
 
@@ -55,7 +33,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Shop'),
+        title: Text('Welcome:'),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (selected) {
@@ -102,13 +80,14 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ProductGrid(
-              isFav: _isFav,
-            ),
+      body: FutureBuilder(
+        future: Provider.of<Products>(context, listen: false).fetchData(),
+        builder: (cntx, snap) => snap.connectionState == ConnectionState.waiting
+            ? CircularProgressIndicator()
+            : ProductGrid(
+                isFav: _isFav,
+              ),
+      ),
     );
   }
 }

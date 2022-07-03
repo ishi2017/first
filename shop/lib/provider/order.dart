@@ -35,6 +35,7 @@ class Orders with ChangeNotifier {
 
     final extractData = json.decode(response.body) as Map<String, dynamic>;
     if (extractData == null) {
+      _orders = [];
       return;
     }
 
@@ -69,6 +70,7 @@ class Orders with ChangeNotifier {
       url,
       body: json.encode(
         {
+          'creatorId': userId,
           'amount': total,
           'orderDate': timeStamp.toIso8601String(),
           'cartProducts': cartItems
