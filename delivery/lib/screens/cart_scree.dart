@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../provider/cart.dart' show Cart;
 import '../screens/cart_item_screen.dart' as ci;
 import '../provider/order.dart';
+import '../provider/user_profile.dart';
 
 class CartScreen extends StatelessWidget {
   static String RouteName = '/CardScreen';
@@ -12,7 +13,13 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProfile userInfo = UserProfile(name: '', mobileNo: '', Address: '');
     final cart = Provider.of<Cart>(context);
+    Provider.of<User>(context).getUserProfile().then((value) {
+      userInfo.name = value.name;
+      userInfo.mobileNo = value.mobileNo;
+      userInfo.Address = value.Address;
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text('Cart Details')),
@@ -27,7 +34,7 @@ class CartScreen extends StatelessWidget {
                 Chip(
                   label: Text('${cart.totalAmount}'),
                 ),
-                OrderNow(cart: cart),
+                OrderNow(cart: cart, user: userInfo),
                 SizedBox(
                   height: 10,
                 ),
@@ -57,9 +64,11 @@ class OrderNow extends StatefulWidget {
   const OrderNow({
     Key key,
     @required this.cart,
+    @required this.user,
   }) : super(key: key);
 
   final Cart cart;
+  final UserProfile user;
 
   @override
   State<OrderNow> createState() => _OrderNowState();
@@ -84,9 +93,9 @@ class _OrderNowState extends State<OrderNow> {
               });
 
               await Provider.of<Orders>(context, listen: false).addOrders(
-                widget.cart.items.values.toList(),
-                widget.cart.totalAmount,
-              );
+                  widget.cart.items.values.toList(),
+                  widget.cart.totalAmount,
+                  widget.user);
               setState(() {
                 isLoading = false;
               });

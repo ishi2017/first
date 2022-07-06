@@ -29,7 +29,7 @@ class _OrderItemsState extends State<OrderItems> {
             ListTile(
               leading: Text(widget.order.amount.toString()),
               title: Text(DateFormat.yMMMEd().format(widget.order.orderDate)),
-              subtitle: Text('Delivery Time'),
+              subtitle: Text('Status:' + widget.order.deliveryStatus + ' Yet'),
               trailing: IconButton(
                 icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
                 onPressed: () {

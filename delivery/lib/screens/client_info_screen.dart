@@ -21,7 +21,8 @@ class _ClientInfoState extends State<ClientInfo> {
 
   final _formKey = GlobalKey<FormState>();
 
-  UserProfile newUser = UserProfile(name: '', mobileNo: '', Address: '');
+  UserProfile newUser =
+      UserProfile(userID: '', mobileNo: '', Address: '', name: '');
 
   @override
   void dispose() {
@@ -42,7 +43,9 @@ class _ClientInfoState extends State<ClientInfo> {
     final user = Provider.of<User>(context, listen: false);
 
     try {
-      user.addUserProfile(userId: auth.userID, profile: newUser);
+      //user.addUserProfile(userId: auth.userID, profile: newUser);
+
+      user.updateProfile(userId: auth.userID, profile: newUser);
     } on HttpException catch (e) {
       await showDialog(
         context: context,
@@ -65,6 +68,7 @@ class _ClientInfoState extends State<ClientInfo> {
 
   @override
   Widget build(BuildContext context) {
+    newUser = ModalRoute.of(context).settings.arguments as UserProfile;
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
@@ -84,6 +88,7 @@ class _ClientInfoState extends State<ClientInfo> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              initialValue: newUser.name,
               decoration: InputDecoration(
                   label: Text('Enter User Name'),
                   prefixIcon: Icon(
@@ -101,12 +106,14 @@ class _ClientInfoState extends State<ClientInfo> {
               },
               onSaved: (value) {
                 newUser = UserProfile(
+                    userID: newUser.userID,
                     name: value,
                     mobileNo: newUser.mobileNo,
                     Address: newUser.Address);
               },
             ),
             TextFormField(
+              initialValue: newUser.mobileNo,
               decoration: InputDecoration(
                   label: Text('Enter Phone No'),
                   prefixIcon: Icon(
@@ -124,12 +131,14 @@ class _ClientInfoState extends State<ClientInfo> {
               },
               onSaved: (value) {
                 newUser = UserProfile(
+                    userID: newUser.userID,
                     name: newUser.name,
                     mobileNo: value,
                     Address: newUser.Address);
               },
             ),
             TextFormField(
+              initialValue: newUser.Address,
               decoration: InputDecoration(
                   label: Text('Enter Complete Address'),
                   prefixIcon: Icon(
@@ -143,6 +152,7 @@ class _ClientInfoState extends State<ClientInfo> {
               },
               onSaved: (value) {
                 newUser = UserProfile(
+                    userID: newUser.userID,
                     name: newUser.name,
                     mobileNo: newUser.mobileNo,
                     Address: value);

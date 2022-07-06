@@ -8,6 +8,7 @@ import '../widgets/product_grid.dart';
 import '../widgets/badge.dart';
 import '../provider/cart.dart';
 import '../screens/cart_scree.dart';
+import '../provider/user_profile.dart';
 
 enum filters { Favourite, All }
 
@@ -18,8 +19,15 @@ class ProductOverviewScreen extends StatefulWidget {
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  String _name = '';
+
   @override
   void initState() {
+    Provider.of<User>(context, listen: false).getUserProfile().then((value) {
+      setState(() {
+        _name = value.name;
+      });
+    });
     super.initState();
   }
 
@@ -33,7 +41,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome:'),
+        title: Text('Welcome:' + _name),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (selected) {

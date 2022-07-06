@@ -25,7 +25,7 @@ class User with ChangeNotifier {
 
   User(this.token, this.userId);
 
-  Future<bool> isProfileComplete() async {
+  Future<bool> isProfileExist() async {
     final URL = Uri.parse(
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}.json?auth=${token}');
     final response = await http.get(URL);
@@ -36,26 +36,57 @@ class User with ChangeNotifier {
     return true;
   }
 
+  Future<UserProfile> getUserProfile() async {
+    UserProfile extractedProfile;
+    final URL = Uri.parse(
+        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}.json?auth=${token}');
+    final response = await http.get(URL);
+    if (json.decode(response.body) == null) {
+      return UserProfile(name: '', mobileNo: '', Address: '');
+    }
+
+    final extractUserInfo = json.decode(response.body) as Map<String, dynamic>;
+    // for (dynamic profile in extractUserInfo.values) {
+    //   extractedProfile = UserProfile(
+    //     name: profile['name'],
+    //     mobileNo: profile['mobileNo'],
+    //     Address: profile['Address'],
+    //   );
+    // }
+
+    extractUserInfo.forEach((id, profile) {
+      extractedProfile = UserProfile(
+        userID: id,
+        name: profile['name'],
+        mobileNo: profile['mobileNo'],
+        Address: profile['Address'],
+      );
+    });
+
+    return extractedProfile;
+  }
+
+  Future<void> updateProfile({String userId, UserProfile profile}) async {
+    final URL = Uri.parse(
+        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}/${profile.userID}.json?auth=${token}');
+
+    final response = await http.put(URL,
+        body: json.encode({
+          'name': profile.name,
+          'mobileNo': profile.mobileNo,
+          'Address': profile.Address,
+        }));
+  }
+
   Future<void> addUserProfile({String userId, UserProfile profile}) async {
     final URL = Uri.parse(
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}.json?auth=${token}');
 
     final response = await http.post(URL,
         body: json.encode({
-          'userId': userId,
           'name': profile.name,
           'mobileNo': profile.mobileNo,
           'Address': profile.Address,
         }));
-
-    print(json.decode(response.body));
-
-    // if (response.statusCode > 400) {
-    //   print('Error');
-    //   throw HttpException('Error Occured Bhai....');
-    // }
-    // print('Record Saved');
   }
-
-  voidEditUserProfile() {}
 }
