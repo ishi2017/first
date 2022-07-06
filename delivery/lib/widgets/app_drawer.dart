@@ -49,20 +49,20 @@ class AppDrawer extends StatelessWidget {
               // );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.payment),
-            title: Text(
-              'User Profile',
-              style: TextStyle(color: Colors.black),
-            ),
-            onTap: () {
-              print('Am There');
-              Provider.of<User>(context, listen: false)
-                  .isProfileComplete()
-                  .then((value) => print(value));
-              //Navigator.of(context).pushNamed(ClientInfo.RouteName);
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.payment),
+          //   title: Text(
+          //     'User Profile',
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          //   onTap: () {
+
+          //     Provider.of<User>(context, listen: false)
+          //         .isProfileComplete()
+          //         .then((value) => print(value));
+          //     //Navigator.of(context).pushNamed(ClientInfo.RouteName);
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text(

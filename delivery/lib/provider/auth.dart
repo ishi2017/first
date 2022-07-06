@@ -37,7 +37,7 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  Future<String> _authenticate(
+  Future<dynamic> _authenticate(
       {String Email, String Password, String urlHost}) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:${urlHost}?key=AIzaSyCoikIG1Z18jb8XEk364Yl-6ip8JR5cBvQ');
@@ -73,7 +73,7 @@ class Auth with ChangeNotifier {
       prefs.setString('userData', userData);
 
       this._email = extractedData['email'];
-      return extractedData['email'];
+      return extractedData;
     } catch (error) {
       throw error;
     }
@@ -98,12 +98,12 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  Future<String> signup({String Email, String Password}) async {
+  Future<dynamic> signup({String Email, String Password}) async {
     return await _authenticate(
         Email: Email, Password: Password, urlHost: 'signUp');
   }
 
-  Future<String> login({String Email, String Password}) async {
+  Future<dynamic> login({String Email, String Password}) async {
     return await _authenticate(
         Email: Email, Password: Password, urlHost: 'signInWithPassword');
   }

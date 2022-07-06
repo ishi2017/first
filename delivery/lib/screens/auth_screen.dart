@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './product_overview_screen.dart';
 import '../provider/auth.dart';
 import '../models/http_exception.dart';
+import '../provider/user_profile.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -111,12 +112,12 @@ class _AuthCardState extends State<AuthCard>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 800),
     );
 
     _heightAnimation = Tween<Size>(
       begin: Size(double.infinity, 260),
-      end: Size(double.infinity, 320),
+      end: Size(double.infinity, 800),
     ).animate(
       CurvedAnimation(parent: _controller, curve: Curves.linear),
     );
@@ -190,6 +191,12 @@ class _AuthCardState extends State<AuthCard>
 
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  String _userID;
+  UserProfile userProfile = UserProfile(
+    name: '',
+    mobileNo: '',
+    Address: '',
+  );
 
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
@@ -200,6 +207,7 @@ class _AuthCardState extends State<AuthCard>
     setState(() {
       _isLoading = true;
     });
+
     try {
       if (_authMode == AuthMode.Login) {
         await Provider.of<Auth>(context, listen: false)
@@ -210,8 +218,30 @@ class _AuthCardState extends State<AuthCard>
         await Provider.of<Auth>(context, listen: false)
             .signup(Email: _authData['email'], Password: _authData['password'])
             .then((value) async {
+          _userID = value['localId'];
+
+          try {
+            Provider.of<User>(context, listen: false)
+                .addUserProfile(userId: _userID, profile: userProfile);
+          } on HttpException catch (e) {
+            await showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: Text('Error Occured'),
+                content: Text(e.toString()),
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Okay'))
+                ],
+              ),
+            );
+          }
+
           bool result = await _showCreatedUserID(
-              "Your User ID Created With User Name::" + value);
+              "Your User ID Created With User Name::" + value['email']);
           if (result) {
             _switchAuthMode();
           }
@@ -268,10 +298,10 @@ class _AuthCardState extends State<AuthCard>
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
         curve: Curves.easeIn,
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.Signup ? 800 : 260,
         // height: _heightAnimation.value.height,
         constraints: BoxConstraints(
-          minHeight: _authMode == AuthMode.Signup ? 320 : 260,
+          minHeight: _authMode == AuthMode.Signup ? 800 : 260,
         ),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
@@ -307,7 +337,6 @@ class _AuthCardState extends State<AuthCard>
                     _authData['password'] = value;
                   },
                 ),
-                // if (_authMode == AuthMode.Signup)
                 AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeIn,
@@ -332,6 +361,66 @@ class _AuthCardState extends State<AuthCard>
                     ),
                   ),
                 ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Name'),
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Invalid Name';
+                      }
+                      if (value.length < 5) {
+                        return 'Invalid Name, Minimum 5 Charachter Required';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      userProfile = UserProfile(
+                        name: value,
+                        mobileNo: userProfile.mobileNo,
+                        Address: userProfile.Address,
+                      );
+                    },
+                  ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Mobile No'),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Mobile Number is must for Delivery';
+                      }
+                      if (value.length < 10 || value.length > 12) {
+                        return 'Ivalid Mobile No';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      userProfile = UserProfile(
+                        name: userProfile.name,
+                        mobileNo: value,
+                        Address: userProfile.Address,
+                      );
+                    },
+                  ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Address'),
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Invalid Address ! Must for Delivery';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      userProfile = UserProfile(
+                        name: userProfile.name,
+                        mobileNo: userProfile.mobileNo,
+                        Address: value,
+                      );
+                    },
+                  ),
                 SizedBox(
                   height: 20,
                 ),
