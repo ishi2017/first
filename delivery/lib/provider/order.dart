@@ -92,23 +92,6 @@ class Orders with ChangeNotifier {
         print(false);
       }
     }
-
-    // for (Map<String,dynamic> eachOrder in extractData) {
-    //   print(eachOrder.key);
-    //   print(eachOrder.value);
-    // if (eachOrder.value['orderDate'] == (OrderDate)) {
-    //   url = Uri.parse(
-    //       'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId/${eachOrder.key}.json?auth=${token}');
-    //   final res = await http.put(
-    //     url,
-    //     body: json.encode(
-    //       {
-    //         'status': '${newStatus}',
-    //       },
-    //     ),
-    //   );
-    // }
-    //}
   }
 
   Future<void> fetchAndSet() async {

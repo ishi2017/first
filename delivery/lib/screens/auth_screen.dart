@@ -213,15 +213,9 @@ class _AuthCardState extends State<AuthCard>
       String email;
       if (_authMode == AuthMode.Login) {
         await Provider.of<Auth>(context, listen: false)
-            .login(Email: _authData['email'], Password: _authData['password'])
-            .then((value) async {
-          email = value['email'];
-          print(email);
-        });
+            .login(Email: _authData['email'], Password: _authData['password']);
 
-        Navigator.of(context).pushReplacementNamed(
-            ProductOverviewScreen.RouteName,
-            arguments: email);
+        //Navigator.of(context).pushReplacementNamed('/', arguments: email);
       } else {
         await Provider.of<Auth>(context, listen: false)
             .signup(Email: _authData['email'], Password: _authData['password'])
@@ -413,11 +407,15 @@ class _AuthCardState extends State<AuthCard>
                   ),
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Address'),
+                    decoration:
+                        InputDecoration(labelText: '#102, Shanti Nagar, BSL'),
                     keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Invalid Address ! Must for Delivery';
+                      }
+                      if (value.length > 30) {
+                        return 'Max 30 letters';
                       }
                       return null;
                     },

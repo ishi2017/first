@@ -18,6 +18,7 @@ import './provider/order.dart';
 import './screens/splash_screen.dart';
 import './provider/user_profile.dart';
 import './helpers/custom_route.dart';
+import './screens/seller_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,6 +30,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    //String email = ModalRoute.of(context).settings.arguments as String;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -95,15 +97,20 @@ class _MyAppState extends State<MyApp> {
         // home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
         initialRoute: '/',
         routes: {
-          '/': (cntx) => Provider.of<Auth>(cntx).isAuth
-              ? ProductOverviewScreen()
-              : FutureBuilder(
-                  future: Provider.of<Auth>(cntx).tryAutoLogin(),
-                  builder: (cntx, authResult) =>
-                      authResult.connectionState == ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthScreen(),
-                ),
+          '/': (cntx) => (Provider.of<Auth>(cntx).isAuth &&
+                  Provider.of<Auth>(cntx, listen: false)
+                      .email
+                      .contains('gauli@gmail.com'))
+              ? SellerDashBoard()
+              : Provider.of<Auth>(cntx).isAuth
+                  ? ProductOverviewScreen()
+                  : FutureBuilder(
+                      future: Provider.of<Auth>(cntx).tryAutoLogin(),
+                      builder: (cntx, authResult) =>
+                          authResult.connectionState == ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen(),
+                    ),
           ProductOverviewScreen.RouteName: (cntx) => ProductOverviewScreen(),
           SellerDashBoard.routeName: (cntx) => SellerDashBoard(),
           ProductItems.routeName: (cntx) => ProductItems(),

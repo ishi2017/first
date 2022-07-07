@@ -90,7 +90,7 @@ class _ClientInfoState extends State<ClientInfo> {
             TextFormField(
               initialValue: newUser.name,
               decoration: InputDecoration(
-                  label: Text('Enter User Name'),
+                  label: Text('Name'),
                   prefixIcon: Icon(
                     Icons.account_circle_outlined,
                     color: Colors.blue,
@@ -102,6 +102,12 @@ class _ClientInfoState extends State<ClientInfo> {
                 FocusScope.of(context).requestFocus(_phoneFocusNode);
               },
               validator: (value) {
+                if (value.isEmpty) {
+                  return 'Invalid Name';
+                }
+                if (value.length < 5) {
+                  return 'Invalid Name, Minimum 5 Charachter Required';
+                }
                 return null;
               },
               onSaved: (value) {
@@ -127,6 +133,12 @@ class _ClientInfoState extends State<ClientInfo> {
                 FocusScope.of(context).requestFocus(_addressFocusNode);
               },
               validator: (value) {
+                if (value.isEmpty) {
+                  return 'Mobile Number is must for Delivery';
+                }
+                if (value.length < 10 || value.length > 12) {
+                  return 'Ivalid Mobile No';
+                }
                 return null;
               },
               onSaved: (value) {
@@ -140,7 +152,7 @@ class _ClientInfoState extends State<ClientInfo> {
             TextFormField(
               initialValue: newUser.Address,
               decoration: InputDecoration(
-                  label: Text('Enter Complete Address'),
+                  label: Text('#102, Shanti Nagar, BSL'),
                   prefixIcon: Icon(
                     Icons.location_on_outlined,
                     color: Colors.blue,
@@ -148,6 +160,12 @@ class _ClientInfoState extends State<ClientInfo> {
               keyboardType: TextInputType.text,
               maxLines: 3,
               validator: (value) {
+                if (value.isEmpty) {
+                  return 'Invalid Address ! Must for Delivery';
+                }
+                if (value.length > 30) {
+                  return 'Max 30 letters';
+                }
                 return null;
               },
               onSaved: (value) {

@@ -25,6 +25,7 @@ class Auth with ChangeNotifier {
   }
 
   bool get isAuth {
+    //logout();
     return token != null;
   }
 
