@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import './screens/seller_screen.dart';
 import './screens/client_info_screen.dart';
 import './screens/product_detail.dart';
 import './screens/product_overview_screen.dart';
@@ -104,6 +105,7 @@ class _MyAppState extends State<MyApp> {
                           : AuthScreen(),
                 ),
           ProductOverviewScreen.RouteName: (cntx) => ProductOverviewScreen(),
+          SellerDashBoard.routeName: (cntx) => SellerDashBoard(),
           ProductItems.routeName: (cntx) => ProductItems(),
           ProductDetail.routeName: (cntx) => ProductDetail(),
           CartScreen.RouteName: (cntx) => CartScreen(),

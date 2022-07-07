@@ -5,6 +5,7 @@ import './product_overview_screen.dart';
 import '../provider/auth.dart';
 import '../models/http_exception.dart';
 import '../provider/user_profile.dart';
+import '../screens/seller_screen.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -209,11 +210,18 @@ class _AuthCardState extends State<AuthCard>
     });
 
     try {
+      String email;
       if (_authMode == AuthMode.Login) {
         await Provider.of<Auth>(context, listen: false)
-            .login(Email: _authData['email'], Password: _authData['password']);
-        Navigator.of(context)
-            .pushReplacementNamed(ProductOverviewScreen.RouteName);
+            .login(Email: _authData['email'], Password: _authData['password'])
+            .then((value) async {
+          email = value['email'];
+          print(email);
+        });
+
+        Navigator.of(context).pushReplacementNamed(
+            ProductOverviewScreen.RouteName,
+            arguments: email);
       } else {
         await Provider.of<Auth>(context, listen: false)
             .signup(Email: _authData['email'], Password: _authData['password'])

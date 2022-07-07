@@ -9,10 +9,12 @@ import '../widgets/badge.dart';
 import '../provider/cart.dart';
 import '../screens/cart_scree.dart';
 import '../provider/user_profile.dart';
+import '../screens/seller_screen.dart';
 
 enum filters { Favourite, All }
 
 class ProductOverviewScreen extends StatefulWidget {
+ 
   static String RouteName = '/product_overview';
   @override
   State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
@@ -27,6 +29,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       setState(() {
         _name = value.name;
       });
+
     });
     super.initState();
   }
@@ -39,6 +42,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool _isFav = false;
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome:' + _name),
