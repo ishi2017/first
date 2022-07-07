@@ -37,6 +37,80 @@ class Orders with ChangeNotifier {
   String userId;
   Orders(this.token, this.userId, this._orders);
 
+  Future<List<OrderItem>> fetchforSeller() async {
+    List<OrderItem> loadedOrders = [];
+    final url = Uri.parse(
+        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order.json?auth=${token}');
+    final response = await http.get(url);
+    final extractData = json.decode(response.body) as Map<String, dynamic>;
+
+    for (Map<String, dynamic> eachUsersOrders in extractData.values) {
+      for (var eachOrder in eachUsersOrders.values) {
+        if (eachOrder['status'] == 'NotDelivered') {
+          loadedOrders.add(
+            OrderItem(
+              deliveryStatus: eachOrder['status'],
+              id: eachOrder['id'],
+              userName: eachOrder['userName'],
+              mobileNo: eachOrder['mobileNo'],
+              Address: eachOrder['address'],
+              amount: eachOrder['amount'],
+              orderDate: DateTime.parse(eachOrder['orderDate']),
+              cartProducts: (eachOrder['cartProducts'] as List<dynamic>)
+                  .map((cp) => CartItem(
+                        id: cp['id'],
+                        title: cp['title'],
+                        Quantity: cp['quantity'],
+                        price: cp['price'],
+                      ))
+                  .toList(),
+            ),
+          );
+        }
+      }
+    }
+    for (var v in loadedOrders) {
+      print(v.amount);
+    }
+    return loadedOrders;
+  }
+
+  Future<void> changeOrderStatus(
+      {String newStatus, String forUserId, String OrderDate}) async {
+    final url = Uri.parse(
+        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId.json?auth=${token}');
+    final response = await http.get(url);
+
+    final extractData = json.decode(response.body) as Map<String, dynamic>;
+    for (var data in extractData.entries) {
+      if (data.value['orderDate'] == OrderDate) {
+        final orderURL = Uri.parse(
+            'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId/${data.key}.json?auth=${token}');
+        final response = await http.patch(orderURL,
+            body: json.encode({'status': newStatus}));
+      } else {
+        print(false);
+      }
+    }
+
+    // for (Map<String,dynamic> eachOrder in extractData) {
+    //   print(eachOrder.key);
+    //   print(eachOrder.value);
+    // if (eachOrder.value['orderDate'] == (OrderDate)) {
+    //   url = Uri.parse(
+    //       'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId/${eachOrder.key}.json?auth=${token}');
+    //   final res = await http.put(
+    //     url,
+    //     body: json.encode(
+    //       {
+    //         'status': '${newStatus}',
+    //       },
+    //     ),
+    //   );
+    // }
+    //}
+  }
+
   Future<void> fetchAndSet() async {
     final url = Uri.parse(
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId.json?auth=${token}');

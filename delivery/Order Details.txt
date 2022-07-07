@@ -1,0 +1,22 @@
+{
+L6bt9XJEy9RwCI9ROa7yM4IJe112:
+ {-N6IEg7Y0BROkzV2g-3d: 
+	{
+       address: Railway Officer Colony Bhusawal, 
+       amount: 220.0,
+       cartProducts: [
+                       {
+                         id: 2022-07-06 16:52:00.078943,
+                         price: 50.0, 
+                         quantity: 2,
+                         title: Amul Cheese
+                       },
+                    ],
+       creatorId: L6bt9XJEy9RwCI9ROa7yM4IJe112,
+       mobileNo: 9145551885,
+       orderDate: 2022-07-06T16:52:03.280021,
+       status: NotDelivered, 
+       userName: Amrit
+     }
+ }
+}

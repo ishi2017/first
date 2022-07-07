@@ -6,6 +6,7 @@ import '../screens/client_info_screen.dart';
 import '../provider/auth.dart';
 import '../provider/user_profile.dart';
 import '../helpers/custom_route.dart';
+import '../provider/order.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
@@ -71,6 +72,21 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pop();
               await Provider.of<Auth>(context, listen: false).logout();
               Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.payment),
+            title: Text(
+              'Orders for Seller',
+              style: TextStyle(color: Colors.black),
+            ),
+            onTap: () {
+              print('Am Clicked');
+              Provider.of<Orders>(context, listen: false).changeOrderStatus(
+                OrderDate: '2022-07-06T21:50:28.173320',
+                newStatus: 'This is new Status',
+                forUserId: '123',
+              );
             },
           ),
         ],
