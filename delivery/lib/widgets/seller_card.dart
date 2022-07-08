@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import '../provider/order.dart';
 import '../provider/order.dart';
 
 class SellerCard extends StatefulWidget {
   final OrderItem order;
+  final Function changeState;
 
   const SellerCard({
     Key key,
     this.order,
+    this.changeState,
   }) : super(key: key);
 
   @override
@@ -67,8 +71,33 @@ class _SellerCardState extends State<SellerCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text('Fake Profile')),
-                ElevatedButton(onPressed: () {}, child: Text('Item Delivered'))
+                ElevatedButton(
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false)
+                          .changeOrderStatus(
+                              newStatus: 'FakeID',
+                              OrderDate:
+                                  widget.order.orderDate.toIso8601String(),
+                              forUserId: widget.order.id);
+                      widget.changeState();
+                    },
+                    child: Text('Fake Profile')),
+                ElevatedButton(
+                    onPressed: () {
+                      print(widget.order.id);
+                      Provider.of<Orders>(context, listen: false)
+                          .changeOrderStatus(
+                              newStatus: 'Item Delivered',
+                              OrderDate:
+                                  widget.order.orderDate.toIso8601String(),
+                              forUserId: widget.order.id);
+                      widget.changeState();
+                    },
+                    child: Text('Item Delivered')),
+                ElevatedButton(
+                  onPressed: null,
+                  child: Text('Print Receipt'),
+                ),
               ],
             )
           ],

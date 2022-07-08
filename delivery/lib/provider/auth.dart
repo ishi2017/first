@@ -13,6 +13,7 @@ class Auth with ChangeNotifier {
   String _email;
 
   String get email {
+    print(_email);
     return _email;
   }
 
@@ -25,7 +26,7 @@ class Auth with ChangeNotifier {
   }
 
   bool get isAuth {
-    //logout();
+    logout();
     return token != null;
   }
 
@@ -63,17 +64,17 @@ class Auth with ChangeNotifier {
       );
       autoLogOut();
       notifyListeners();
-
+      this._email = extractedData['email'];
       /* We r storing data in device storge */
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode({
+        'email': _email,
         'token': _token,
         'userId': _userId,
         'expiryDate': _expiryDate.toIso8601String()
       });
       prefs.setString('userData', userData);
 
-      this._email = extractedData['email'];
       return extractedData;
     } catch (error) {
       throw error;
@@ -89,11 +90,13 @@ class Auth with ChangeNotifier {
         json.decode(prefs.getString('userData')) as Map<String, Object>;
     _expiryDate = DateTime.parse(extractData['expiryDate']);
     if (_expiryDate.isBefore(DateTime.now())) {
+      await autoLogOut();
       return false;
     }
     _token = extractData['token'];
     _userId = extractData['userId'];
-    await autoLogOut();
+    _email = extractData['email'];
+
     notifyListeners();
 
     return true;
@@ -118,6 +121,12 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
     notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    //prefs.remove('userDate');
+    prefs.clear();
+  }
+
+  void clearPref() async {
     final prefs = await SharedPreferences.getInstance();
     //prefs.remove('userDate');
     prefs.clear();

@@ -50,7 +50,7 @@ class Orders with ChangeNotifier {
           loadedOrders.add(
             OrderItem(
               deliveryStatus: eachOrder['status'],
-              id: eachOrder['id'],
+              id: eachOrder['creatorId'],
               userName: eachOrder['userName'],
               mobileNo: eachOrder['mobileNo'],
               Address: eachOrder['address'],
@@ -78,19 +78,20 @@ class Orders with ChangeNotifier {
   Future<void> changeOrderStatus(
       {String newStatus, String forUserId, String OrderDate}) async {
     final url = Uri.parse(
-        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId.json?auth=${token}');
+        'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$forUserId.json?auth=${token}');
     final response = await http.get(url);
 
     final extractData = json.decode(response.body) as Map<String, dynamic>;
     for (var data in extractData.entries) {
       if (data.value['orderDate'] == OrderDate) {
         final orderURL = Uri.parse(
-            'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$userId/${data.key}.json?auth=${token}');
+            'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$forUserId/${data.key}.json?auth=${token}');
         final response = await http.patch(orderURL,
             body: json.encode({'status': newStatus}));
       } else {
         print(false);
       }
+      notifyListeners();
     }
   }
 
