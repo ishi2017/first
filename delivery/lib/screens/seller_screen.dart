@@ -28,10 +28,10 @@ class _SellerDashBoardState extends State<SellerDashBoard>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // if (state == AppLifecycleState.detached) {
-    //   Provider.of<Auth>(context, listen: false).clearPref();
-    //   exit(0);
-    // }
+    if (state == AppLifecycleState.detached) {
+      Provider.of<Auth>(context, listen: false).logout();
+      exit(0);
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,27 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      Provider.of<Auth>(context, listen: false).logout();
+      exit(0);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     //String email = ModalRoute.of(context).settings.arguments as String;
