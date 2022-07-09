@@ -34,12 +34,20 @@ dependencies:
   http: ^0.13.4
   #cloud_firestore: ^3.1.18
   shared_preferences: ^2.0.15
+  
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.3
   
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/places.png"
+  adapative_icon_background: "#191919"
+  adapative_icon_foreground: "assets/icon/places-adaptive.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
