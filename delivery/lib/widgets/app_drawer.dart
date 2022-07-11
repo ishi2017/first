@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import '../screens/order_screen.dart';
 import '../screens/user_product_screen.dart';
 import '../screens/client_info_screen.dart';
 import '../provider/auth.dart';
 import '../provider/user_profile.dart';
-import '../helpers/custom_route.dart';
-import '../provider/order.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
@@ -42,12 +41,6 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(OrderedItems.RouteName);
-
-              // Navigator.of(context).pushReplacement(
-              //   CustomRoute(
-              //     builder: (cntx) => OrderedItems(),
-              //   ),
-              // );
             },
           ),
           ListTile(
@@ -62,6 +55,21 @@ class AppDrawer extends StatelessWidget {
                       .pushNamed(ClientInfo.RouteName, arguments: userProfile));
             },
           ),
+          if (Provider.of<Auth>(context, listen: false)
+              .email
+              .contains('admin@gmail.com'))
+            ListTile(
+              leading: Icon(Icons.payment),
+              title: Text(
+                'Product Management',
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                Provider.of<User>(context, listen: false).getUserProfile().then(
+                    (userProfile) => Navigator.of(context)
+                        .pushNamed(UserProductScreen.RouteName));
+              },
+            ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text(
@@ -72,21 +80,6 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pop();
               await Provider.of<Auth>(context, listen: false).logout();
               Navigator.of(context).pushReplacementNamed('/');
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.payment),
-            title: Text(
-              'Orders for Seller',
-              style: TextStyle(color: Colors.black),
-            ),
-            onTap: () {
-              print('Am Clicked');
-              Provider.of<Orders>(context, listen: false).changeOrderStatus(
-                OrderDate: '2022-07-06T21:50:28.173320',
-                newStatus: 'This is new Status',
-                forUserId: '123',
-              );
             },
           ),
         ],

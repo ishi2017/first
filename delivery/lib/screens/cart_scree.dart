@@ -88,6 +88,10 @@ class _OrderNowState extends State<OrderNow> {
       onPressed: (widget.cart.totalAmount <= 0)
           ? null
           : () async {
+              if (widget.cart.totalAmount < 100) {
+                _showMinOrderRequired(context);
+                return;
+              }
               setState(() {
                 isLoading = true;
               });
@@ -103,4 +107,21 @@ class _OrderNowState extends State<OrderNow> {
             },
     );
   }
+}
+
+void _showMinOrderRequired(BuildContext context) async {
+  await showDialog(
+    context: context,
+    builder: (cntx) => AlertDialog(
+      title: Text(
+        'Minimum Order Value ?',
+        style: TextStyle(fontWeight: FontWeight.normal),
+      ),
+      content: Text("Minimum Rs. 100 Order is Required ?"),
+      actions: [
+        ElevatedButton(
+            onPressed: () => Navigator.of(cntx).pop(), child: Text('Okay'))
+      ],
+    ),
+  );
 }

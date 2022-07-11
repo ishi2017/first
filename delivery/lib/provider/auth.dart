@@ -62,6 +62,7 @@ class Auth with ChangeNotifier {
           seconds: int.parse(extractedData['expiresIn']),
         ),
       );
+      print("Token Generated==>" + _token);
       autoLogOut();
       notifyListeners();
       this._email = extractedData['email'];

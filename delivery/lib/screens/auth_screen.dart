@@ -175,15 +175,11 @@ class _AuthCardState extends State<AuthCard>
             actions: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(cntx).pop(true);
+                  //  if (mounted) {
+                  Navigator.of(null).pop(true);
+                  //}
                 },
-                child: Text('Login'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(cntx).pop(false);
-                },
-                child: Text('Cancle'),
+                child: Text('Okay'),
               ),
             ],
           )),
@@ -205,9 +201,10 @@ class _AuthCardState extends State<AuthCard>
       return;
     }
     _formKey.currentState.save();
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted)
+      setState(() {
+        _isLoading = true;
+      });
 
     try {
       String email;
@@ -221,7 +218,8 @@ class _AuthCardState extends State<AuthCard>
             .signup(Email: _authData['email'], Password: _authData['password'])
             .then((value) async {
           _userID = value['localId'];
-
+          print('User ID=' + _userID);
+          print('Profile Details:' + userProfile.toString());
           try {
             Provider.of<User>(context, listen: false)
                 .addUserProfile(userId: _userID, profile: userProfile);
@@ -240,13 +238,15 @@ class _AuthCardState extends State<AuthCard>
                 ],
               ),
             );
+          } catch (error) {
+            print(error.toString());
           }
 
-          bool result = await _showCreatedUserID(
-              "Your User ID Created With User Name::" + value['email']);
-          if (result) {
-            _switchAuthMode();
-          }
+          // bool result = await _showCreatedUserID(
+          //     "Your User ID Created With User Name::" + value['email']);
+          // if (result) {
+          //   _switchAuthMode();
+          // }
           //Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
         });
       }
@@ -265,10 +265,12 @@ class _AuthCardState extends State<AuthCard>
       } else if (error.toString().contains('USER_DISABLED')) {
         errorMsg = 'Your Account has been Disabled';
       }
-      _showDialog(errorMsg);
+      print(errorMsg);
+      // await _showDialog(errorMsg);
     } catch (error) {
       String errorMsg = 'Unable to Login Try Later !';
-      _showDialog(errorMsg);
+      // await _showDialog(errorMsg);
+      print(errorMsg);
     }
     setState(() {
       _isLoading = false;

@@ -79,14 +79,26 @@ class User with ChangeNotifier {
   }
 
   Future<void> addUserProfile({String userId, UserProfile profile}) async {
+    print('User ID::' + userId);
+    print(profile);
+    print('In add User');
     final URL = Uri.parse(
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}.json?auth=${token}');
-
-    final response = await http.post(URL,
-        body: json.encode({
-          'name': profile.name,
-          'mobileNo': profile.mobileNo,
-          'Address': profile.Address,
-        }));
+    try {
+      final response = await http.post(URL,
+          body: json.encode({
+            'name': profile.name,
+            'mobileNo': profile.mobileNo,
+            'Address': profile.Address,
+          }));
+      if (response.statusCode >= 400) {
+        print(response.statusCode);
+        throw HttpException(
+            "Error from Firebase" + response.statusCode.toString());
+      }
+    } catch (error) {
+      print("Error is there::" + error.toString());
+      throw error;
+    }
   }
 }

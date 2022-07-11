@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           '/': (cntx) => (Provider.of<Auth>(cntx).isAuth &&
                   Provider.of<Auth>(cntx, listen: false)
                       .email
-                      .contains('gauli@gmail.com'))
+                      .contains('sales@gmail.com'))
               ? SellerDashBoard()
               : Provider.of<Auth>(cntx).isAuth
                   ? ProductOverviewScreen()
