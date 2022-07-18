@@ -78,6 +78,13 @@ class ProductItems extends StatelessWidget {
               softWrap: true,
               overflow: TextOverflow.fade,
             ),
+            subtitle: Text(
+              'Rs.' + product.price.toString(),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText2,
+              softWrap: true,
+              overflow: TextOverflow.fade,
+            ),
             trailing: IconButton(
               icon: Icon(
                 Icons.shopping_cart,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import './provider/message.dart';
 import './screens/seller_screen.dart';
 import './screens/client_info_screen.dart';
 import './screens/product_detail.dart';
@@ -19,7 +20,7 @@ import './provider/order.dart';
 import './screens/splash_screen.dart';
 import './provider/user_profile.dart';
 import './helpers/custom_route.dart';
-import './screens/seller_screen.dart';
+import './screens/msg.dart';
 
 void main() => runApp(MyApp());
 
@@ -78,6 +79,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               auth.userID,
               previousOrders.orders == null ? [] : previousOrders.orders),
         ),
+        ChangeNotifierProxyProvider<Auth, MyAdd>(
+            create: (context) => MyAdd(null, null),
+            update: (cnts, auth, previousOrders) => MyAdd(
+                  auth.token,
+                  auth.userID,
+                )),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -141,6 +148,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           UserProductScreen.RouteName: (cntx) => UserProductScreen(),
           EditProductScreen.RouteName: (cntx) => EditProductScreen(),
           ClientInfo.RouteName: (context) => ClientInfo(),
+          Msg.routeName: (context) => Msg(),
         },
         onGenerateRoute: (setting) {
           return MaterialPageRoute(

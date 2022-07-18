@@ -117,7 +117,6 @@ try-catch-finally a feature of dart to catch the errors.*/
       _items.add(NewProduct);
       notifyListeners();
     } catch (error) {
-      print(error);
       throw error; /*Here it should be noted that the error is not of uture type. but the function has to return 
       a future type. So function will return automaticallt Future(()=>throw error)*/
     }

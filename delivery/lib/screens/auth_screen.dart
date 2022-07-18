@@ -44,9 +44,12 @@ class AuthScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
+                      height: 75,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          bottom: 50.0, left: 15.0, right: 10.0),
                       padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
                         ..translate(-10.0),
                       // ..translate(-10.0),
@@ -62,11 +65,11 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'MyShop',
+                        'Dwarkadas Grocery Store, Bhusawal',
                         style: TextStyle(
                           color:
                               Theme.of(context).accentTextTheme.headline6.color,
-                          fontSize: 50,
+                          fontSize: 20,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal,
                         ),
@@ -218,8 +221,7 @@ class _AuthCardState extends State<AuthCard>
             .signup(Email: _authData['email'], Password: _authData['password'])
             .then((value) async {
           _userID = value['localId'];
-          print('User ID=' + _userID);
-          print('Profile Details:' + userProfile.toString());
+
           try {
             Provider.of<User>(context, listen: false)
                 .addUserProfile(userId: _userID, profile: userProfile);
@@ -238,9 +240,7 @@ class _AuthCardState extends State<AuthCard>
                 ],
               ),
             );
-          } catch (error) {
-            print(error.toString());
-          }
+          } catch (error) {}
 
           // bool result = await _showCreatedUserID(
           //     "Your User ID Created With User Name::" + value['email']);
@@ -265,12 +265,12 @@ class _AuthCardState extends State<AuthCard>
       } else if (error.toString().contains('USER_DISABLED')) {
         errorMsg = 'Your Account has been Disabled';
       }
-      print(errorMsg);
+
       // await _showDialog(errorMsg);
     } catch (error) {
       String errorMsg = 'Unable to Login Try Later !';
       // await _showDialog(errorMsg);
-      print(errorMsg);
+
     }
     setState(() {
       _isLoading = false;

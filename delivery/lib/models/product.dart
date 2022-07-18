@@ -28,7 +28,6 @@ class Product with ChangeNotifier {
   }
 
   Future<void> toggleFavourite(Auth auth) async {
-    print(title);
     final oldFavStatus = isFavorite;
     isFavorite = !isFavorite;
     final url = Uri.parse(
@@ -40,7 +39,7 @@ class Product with ChangeNotifier {
           ));
       if (response.statusCode >= 400) {
         _setFavValue(oldFavStatus);
-        print(json.decode(response.body));
+
         throw HttpException('Favourite Status not changed. Try Later!' +
             response.body.toString());
       }

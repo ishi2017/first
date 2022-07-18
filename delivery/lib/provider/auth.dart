@@ -13,7 +13,6 @@ class Auth with ChangeNotifier {
   String _email;
 
   String get email {
-    print(_email);
     return _email;
   }
 
@@ -62,7 +61,7 @@ class Auth with ChangeNotifier {
           seconds: int.parse(extractedData['expiresIn']),
         ),
       );
-      print("Token Generated==>" + _token);
+
       autoLogOut();
       notifyListeners();
       this._email = extractedData['email'];

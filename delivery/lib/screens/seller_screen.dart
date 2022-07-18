@@ -14,9 +14,6 @@ class SellerDashBoard extends StatefulWidget {
 class _SellerDashBoardState extends State<SellerDashBoard>
     with WidgetsBindingObserver {
   List<OrderItem> _loadedOrders = [];
-  void _changeState() {
-    //setState(() {});
-  }
 
   var _expanded = false;
 
@@ -40,38 +37,62 @@ class _SellerDashBoardState extends State<SellerDashBoard>
     super.dispose();
   }
 
+  Future<void> _refresh(BuildContext context) async {
+    await Provider.of<Orders>(context, listen: false)
+        .fetchforSeller()
+        .then((value) {
+      _loadedOrders = value;
+    });
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome Gauli'),
+        title: Text('Welcome Dinesh'),
         actions: [
           IconButton(
-              onPressed: () {
-                Provider.of<Auth>(context, listen: false).logout();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-              icon: Icon(Icons.logout))
+            onPressed: () {
+              _refresh(context);
+            },
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.amber,
+            ),
+          ),
+          ElevatedButton.icon(
+            label: Text('Logout'),
+            onPressed: () {
+              Provider.of<Auth>(context, listen: false).logout();
+              Navigator.of(context).pushReplacementNamed('/');
+            },
+            icon: Icon(Icons.logout),
+          ),
         ],
       ),
       body: FutureBuilder(
-        future: Provider.of<Orders>(context).fetchforSeller().then((value) {
-          _loadedOrders = value;
-        }),
-        builder: (cntx, snap) => snap.connectionState == ConnectionState.waiting
-            ? CircularProgressIndicator()
-            : _loadedOrders.length <= 0
-                ? Center(
-                    child: Text('No Order Received Yet'),
-                  )
-                : ListView.builder(
-                    itemCount: _loadedOrders.length,
-                    itemBuilder: (context, index) => SellerCard(
-                      order: _loadedOrders[index],
-                      changeState: _changeState,
-                    ),
-                  ),
-      ),
+          future: Provider.of<Orders>(context, listen: false)
+              .fetchforSeller()
+              .then((value) {
+            _loadedOrders = value;
+          }),
+          builder: (cntx, snap) =>
+              snap.connectionState == ConnectionState.waiting
+                  ? CircularProgressIndicator()
+                  : RefreshIndicator(
+                      child: _loadedOrders.length <= 0
+                          ? Center(
+                              child: Text('No Order Received Yet'),
+                            )
+                          : ListView.builder(
+                              itemCount: _loadedOrders.length,
+                              itemBuilder: (context, index) => SellerCard(
+                                order: _loadedOrders[index],
+                                changeState: (() => _refresh(context)),
+                              ),
+                            ),
+                      onRefresh: (() => _refresh(context)))),
     );
   }
 }

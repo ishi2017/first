@@ -22,7 +22,7 @@ class CartScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(title: Text('Cart Details')),
+      appBar: AppBar(title: Text('Swipe left to discard items from Cart')),
       body: Column(
         children: [
           Card(

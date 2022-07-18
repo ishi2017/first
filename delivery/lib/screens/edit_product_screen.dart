@@ -70,9 +70,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           editing = true;
           _imageController.text = editedProduct.imageUrl;
         }
-      } catch (error) {
-        print('Error is there');
-      }
+      } catch (error) {}
     }
 
     super.didChangeDependencies();

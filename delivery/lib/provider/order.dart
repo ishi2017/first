@@ -43,7 +43,9 @@ class Orders with ChangeNotifier {
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order.json?auth=${token}');
     final response = await http.get(url);
     final extractData = json.decode(response.body) as Map<String, dynamic>;
-
+    if (extractData == null) {
+      return [];
+    }
     for (Map<String, dynamic> eachUsersOrders in extractData.values) {
       for (var eachOrder in eachUsersOrders.values) {
         if (eachOrder['status'] == 'NotDelivered') {
@@ -69,9 +71,7 @@ class Orders with ChangeNotifier {
         }
       }
     }
-    for (var v in loadedOrders) {
-      print(v.amount);
-    }
+
     return loadedOrders;
   }
 
@@ -88,9 +88,7 @@ class Orders with ChangeNotifier {
             'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/order/$forUserId/${data.key}.json?auth=${token}');
         final response = await http.patch(orderURL,
             body: json.encode({'status': newStatus}));
-      } else {
-        print(false);
-      }
+      } else {}
       notifyListeners();
     }
   }

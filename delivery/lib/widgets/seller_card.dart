@@ -80,11 +80,11 @@ class _SellerCardState extends State<SellerCard> {
                                   widget.order.orderDate.toIso8601String(),
                               forUserId: widget.order.id);
                       widget.changeState();
+                      //setState(() {});
                     },
                     child: Text('Fake Profile')),
                 ElevatedButton(
                     onPressed: () {
-                      print(widget.order.id);
                       Provider.of<Orders>(context, listen: false)
                           .changeOrderStatus(
                               newStatus: 'Item Delivered',
@@ -92,6 +92,7 @@ class _SellerCardState extends State<SellerCard> {
                                   widget.order.orderDate.toIso8601String(),
                               forUserId: widget.order.id);
                       widget.changeState();
+                      // setState(() {});
                     },
                     child: Text('Item Delivered')),
                 ElevatedButton(

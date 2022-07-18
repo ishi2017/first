@@ -79,9 +79,6 @@ class User with ChangeNotifier {
   }
 
   Future<void> addUserProfile({String userId, UserProfile profile}) async {
-    print('User ID::' + userId);
-    print(profile);
-    print('In add User');
     final URL = Uri.parse(
         'https://testing-e346e-default-rtdb.asia-southeast1.firebasedatabase.app/userProfile/${userId}.json?auth=${token}');
     try {
@@ -92,12 +89,10 @@ class User with ChangeNotifier {
             'Address': profile.Address,
           }));
       if (response.statusCode >= 400) {
-        print(response.statusCode);
         throw HttpException(
             "Error from Firebase" + response.statusCode.toString());
       }
     } catch (error) {
-      print("Error is there::" + error.toString());
       throw error;
     }
   }
