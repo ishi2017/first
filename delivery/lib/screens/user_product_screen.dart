@@ -6,13 +6,14 @@ import '../widgets/app_drawer.dart';
 import '../widgets/product_management.dart';
 import '../screens/edit_product_screen.dart';
 import '../models/product.dart';
+import '../provider/auth.dart';
 
 class UserProductScreen extends StatelessWidget {
   static String RouteName = '/userProductScreen';
   const UserProductScreen({Key key}) : super(key: key);
 
   Future<void> _refresh(BuildContext context) async {
-    await Provider.of<Products>(context, listen: false).fetchData(true);
+    await Provider.of<Products>(context, listen: false).fetchData();
   }
 
   @override
@@ -21,11 +22,14 @@ class UserProductScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Product Management'),
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(EditProductScreen.RouteName);
-              },
-              icon: Icon(Icons.add)),
+          if (!Provider.of<Auth>(context, listen: false)
+              .email
+              .contains('sales@gmail.com'))
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(EditProductScreen.RouteName);
+                },
+                icon: Icon(Icons.add)),
         ],
       ),
       drawer: AppDrawer(),

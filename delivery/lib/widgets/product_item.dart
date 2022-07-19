@@ -79,7 +79,7 @@ class ProductItems extends StatelessWidget {
               overflow: TextOverflow.fade,
             ),
             subtitle: Text(
-              'Rs.' + product.price.toString(),
+              'Offer Price Rs.' + product.price.toString(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText2,
               softWrap: true,

@@ -5,6 +5,7 @@ import '../provider/cart.dart' show Cart;
 import '../screens/cart_item_screen.dart' as ci;
 import '../provider/order.dart';
 import '../provider/user_profile.dart';
+import '../provider/message.dart';
 
 class CartScreen extends StatelessWidget {
   static String RouteName = '/CardScreen';
@@ -88,8 +89,12 @@ class _OrderNowState extends State<OrderNow> {
       onPressed: (widget.cart.totalAmount <= 0)
           ? null
           : () async {
-              if (widget.cart.totalAmount < 100) {
-                _showMinOrderRequired(context);
+              double minPrice = double.parse(
+                  Provider.of<MyAdd>(context, listen: false)
+                      .MyMessage
+                      .minPrice);
+              if (widget.cart.totalAmount < minPrice) {
+                _showMinOrderRequired(context, minPrice);
                 return;
               }
               setState(() {
@@ -109,7 +114,7 @@ class _OrderNowState extends State<OrderNow> {
   }
 }
 
-void _showMinOrderRequired(BuildContext context) async {
+void _showMinOrderRequired(BuildContext context, double value) async {
   await showDialog(
     context: context,
     builder: (cntx) => AlertDialog(
@@ -117,7 +122,7 @@ void _showMinOrderRequired(BuildContext context) async {
         'Minimum Order Value ?',
         style: TextStyle(fontWeight: FontWeight.normal),
       ),
-      content: Text("Minimum Rs. 100 Order is Required ?"),
+      content: Text("Minimum Rs. ${value} Order is Required ?"),
       actions: [
         ElevatedButton(
             onPressed: () => Navigator.of(cntx).pop(), child: Text('Okay'))

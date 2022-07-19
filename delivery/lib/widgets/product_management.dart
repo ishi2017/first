@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../screens/edit_product_screen.dart';
 import '../provider/products.dart';
+import '../provider/auth.dart';
 
 class ProductManagement extends StatelessWidget {
   final String ImageUrl;
@@ -36,25 +37,28 @@ class ProductManagement extends StatelessWidget {
               }, //This is the mark 1
               icon: Icon(Icons.edit),
             ),
-            IconButton(
-              onPressed: () async {
-                try {
-                  await Provider.of<Products>(context, listen: false)
-                      .removeProduct(id);
-                } catch (Error) {
-                  Scaffold.of(context).hideCurrentSnackBar();
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        Error.toString(),
+            if (!Provider.of<Auth>(context, listen: false)
+                .email
+                .contains('sales@gmail.com'))
+              IconButton(
+                onPressed: () async {
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        .removeProduct(id);
+                  } catch (Error) {
+                    Scaffold.of(context).hideCurrentSnackBar();
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          Error.toString(),
+                        ),
+                        duration: Duration(seconds: 2),
                       ),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              icon: Icon(Icons.delete),
-            ),
+                    );
+                  }
+                },
+                icon: Icon(Icons.delete),
+              ),
           ],
         ),
       ),

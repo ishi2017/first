@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../provider/order.dart' as ord;
@@ -47,12 +49,21 @@ class _OrderItemsState extends State<OrderItems> {
               child: ListView.builder(
                 itemCount: widget.order.cartProducts.length,
                 itemBuilder: ((context, index) => ListTile(
-                      leading: Text(widget.order.cartProducts[index].title),
-                      trailing: Text('Piece ' +
-                          widget.order.cartProducts[index].Quantity.toString() +
-                          ' @ Rs.' +
-                          widget.order.cartProducts[index].price.toString() +
-                          ' Each'),
+                      dense: true,
+                      leading: Text(
+                        widget.order.cartProducts[index].title,
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      trailing: Text(
+                        widget.order.cartProducts[index].Quantity.toString() +
+                            ' @ Rs.' +
+                            widget.order.cartProducts[index].price.toString() +
+                            ' Each',
+                        style: TextStyle(fontSize: 12),
+                      ),
                     )),
               ),
             ),

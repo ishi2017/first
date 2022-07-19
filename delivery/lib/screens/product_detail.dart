@@ -29,6 +29,7 @@ class ProductDetail extends StatelessWidget {
                     tag: loadedProduct,
                     child: Image.network(
                       loadedProduct.imageUrl,
+                      height: 400,
                       fit: BoxFit.cover,
                       alignment: Alignment.center,
                     ),

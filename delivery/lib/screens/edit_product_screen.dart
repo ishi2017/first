@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../provider/products.dart';
 import '../models/product.dart';
+import '../provider/auth.dart';
 
 class EditProductScreen extends StatefulWidget {
   static String RouteName = '/edit_screen';
@@ -278,40 +279,82 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                     ),
                                   ),
                           ),
-                          Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                label: Text('Enter Url'),
+                          if (Provider.of<Auth>(context, listen: false)
+                              .email
+                              .contains('sales@gmail.com'))
+                            Expanded(
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  label: Text('Enter Url'),
+                                ),
+                                keyboardType: TextInputType.url,
+                                controller: _imageController,
+                                focusNode: _imageUrlFocus,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Enter a URL';
+                                  }
+                                  if (!(value.startsWith('http') ||
+                                      value.startsWith('https'))) {
+                                    _imageController.text = '';
+                                    return 'Not a valid URL';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _existingProduct = Product(
+                                    id: _existingProduct.id,
+                                    title: _existingProduct.title,
+                                    description: _existingProduct.description,
+                                    price: _existingProduct.price,
+                                    imageUrl: value,
+                                  );
+                                },
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) {
+                                  saveMyFormState();
+                                },
                               ),
-                              keyboardType: TextInputType.url,
-                              controller: _imageController,
-                              focusNode: _imageUrlFocus,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Enter a URL';
-                                }
-                                if (!(value.startsWith('http') ||
-                                    value.startsWith('https'))) {
-                                  _imageController.text = '';
-                                  return 'Not a valid URL';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _existingProduct = Product(
-                                  id: _existingProduct.id,
-                                  title: _existingProduct.title,
-                                  description: _existingProduct.description,
-                                  price: _existingProduct.price,
-                                  imageUrl: value,
-                                );
-                              },
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) {
-                                saveMyFormState();
-                              },
                             ),
-                          ),
+                          if (!Provider.of<Auth>(context, listen: false)
+                              .email
+                              .contains('sales@gmail.com'))
+                            Expanded(
+                              child: TextFormField(
+                                enabled: true,
+                                decoration: InputDecoration(
+                                  label: Text('Enter Url'),
+                                ),
+                                keyboardType: TextInputType.url,
+                                controller: _imageController,
+                                focusNode: _imageUrlFocus,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Enter a URL';
+                                  }
+                                  if (!(value.startsWith('http') ||
+                                      value.startsWith('https'))) {
+                                    _imageController.text = '';
+                                    return 'Not a valid URL';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _existingProduct = Product(
+                                    id: _existingProduct.id,
+                                    title: _existingProduct.title,
+                                    description: _existingProduct.description,
+                                    price: _existingProduct.price,
+                                    imageUrl: value,
+                                  );
+                                },
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) {
+                                  saveMyFormState();
+                                },
+                              ),
+                            ),
                         ],
                       )
                     ],

@@ -30,6 +30,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  bool status = true;
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -49,6 +51,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+  // bool _checkStatus(BuildContext cntx) {
+  //   setState(() {
+  //     Provider.of<MyAdd>(cntx, listen: false).getAdd().then((value) {
+  //       if (value.active.contains('Active')) {
+  //         status = true;
+  //       } else {
+  //         status = false;
+  //       }
+  //     });
+
+  //     return status;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -56,12 +56,15 @@ class _SellerCardState extends State<SellerCard> {
               child: ListView.builder(
                 itemCount: widget.order.cartProducts.length,
                 itemBuilder: ((context, index) => ListTile(
-                      leading: Text(widget.order.cartProducts[index].title),
-                      trailing: Text('Piece ' +
-                          widget.order.cartProducts[index].Quantity.toString() +
-                          ' @ Rs.' +
-                          widget.order.cartProducts[index].price.toString() +
-                          ' Each'),
+                      leading: Text(widget.order.cartProducts[index].title,
+                          style: TextStyle(fontSize: 12.0)),
+                      trailing: Text(
+                        widget.order.cartProducts[index].Quantity.toString() +
+                            ' @ Rs.' +
+                            widget.order.cartProducts[index].price.toString() +
+                            ' Each',
+                        style: TextStyle(fontSize: 12.0),
+                      ),
                     )),
               ),
             ),

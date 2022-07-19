@@ -22,7 +22,11 @@ class _AppDrawerState extends State<AppDrawer> {
   void setMsg(message newMsg) {
     msg = newMsg.msg;
     url = newMsg.ImageURL;
-    Provider.of<MyAdd>(context, listen: false).setAdd(msg: msg, imgURL: url);
+    Provider.of<MyAdd>(context, listen: false).setAdd(
+        msg: msg,
+        imgURL: url,
+        status: newMsg.active,
+        minPrice: newMsg.minPrice);
 
     setState(() {});
   }
@@ -52,44 +56,71 @@ class _AppDrawerState extends State<AppDrawer> {
                   false, //It will not add back button here
             ),
             Divider(),
-            ListTile(
-              leading: Icon(Icons.shop, color: Colors.amber),
-              title: Text(
-                'Shopping',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.payment, color: Colors.amber),
-              title: Text(
-                'My Orders',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Navigator.of(context)
-                    .pushReplacementNamed(OrderedItems.RouteName);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.payment, color: Colors.amber),
-              title: Text(
-                'Edit User Profile',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                Provider.of<User>(context, listen: false).getUserProfile().then(
-                    (userProfile) => Navigator.of(context).pushNamed(
-                        ClientInfo.RouteName,
-                        arguments: userProfile));
-              },
-            ),
             if (Provider.of<Auth>(context, listen: false)
                 .email
-                .contains('admin@gmail.com'))
+                .contains('sales@gmail.com'))
+              ListTile(
+                leading: Icon(Icons.home, color: Colors.amber),
+                title: Text(
+                  'Orders',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+            Divider(),
+            if (!Provider.of<Auth>(context, listen: false)
+                .email
+                .contains('sales@gmail.com'))
+              ListTile(
+                leading: Icon(Icons.shop, color: Colors.amber),
+                title: Text(
+                  'Shopping',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+            Divider(),
+            if (!Provider.of<Auth>(context, listen: false)
+                .email
+                .contains('sales@gmail.com'))
+              ListTile(
+                leading: Icon(Icons.payment, color: Colors.amber),
+                title: Text(
+                  'My Orders',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed(OrderedItems.RouteName);
+                },
+              ),
+            if (!Provider.of<Auth>(context, listen: false)
+                .email
+                .contains('sales@gmail.com'))
+              ListTile(
+                leading: Icon(Icons.payment, color: Colors.amber),
+                title: Text(
+                  'Edit User Profile',
+                  style: TextStyle(color: Colors.black),
+                ),
+                onTap: () {
+                  Provider.of<User>(context, listen: false)
+                      .getUserProfile()
+                      .then((userProfile) => Navigator.of(context).pushNamed(
+                          ClientInfo.RouteName,
+                          arguments: userProfile));
+                },
+              ),
+            if (Provider.of<Auth>(context, listen: false)
+                    .email
+                    .contains('admin@gmail.com') ||
+                Provider.of<Auth>(context, listen: false)
+                    .email
+                    .contains('sales@gmail.com'))
               ListTile(
                 leading: Icon(Icons.payment, color: Colors.amber),
                 title: Text(
@@ -108,11 +139,11 @@ class _AppDrawerState extends State<AppDrawer> {
                 .contains('admin@gmail.com'))
               ListTile(
                 leading: Icon(
-                  Icons.message,
+                  Icons.settings,
                   color: Colors.amber,
                 ),
                 title: Text(
-                  'Add Message',
+                  'Settings',
                   style: TextStyle(color: Colors.black),
                 ),
                 onTap: () {

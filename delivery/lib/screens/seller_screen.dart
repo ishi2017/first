@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/seller_card.dart';
 import '../provider/auth.dart';
 import '../provider/order.dart';
@@ -71,6 +72,7 @@ class _SellerDashBoardState extends State<SellerDashBoard>
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body: FutureBuilder(
           future: Provider.of<Orders>(context, listen: false)
               .fetchforSeller()
