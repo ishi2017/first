@@ -21,7 +21,7 @@ class MyAdd with ChangeNotifier {
   String token;
   String userId;
   MyAdd(this.token, this.userId);
-  final fbKey = 'AIzaSyCoikIG1Z18jb8XEk364Yl-6ip8JR5cBvQ';
+  final fbKey = 'AIzaSyBS09uRrPhSS6CTOwNiihJgVnztvOv9nDk';
 
   message MyMessage = message();
 

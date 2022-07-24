@@ -41,7 +41,7 @@ class Auth with ChangeNotifier {
   Future<dynamic> _authenticate(
       {String Email, String Password, String urlHost}) async {
     final url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:${urlHost}?key=AIzaSyCoikIG1Z18jb8XEk364Yl-6ip8JR5cBvQ');
+        'https://identitytoolkit.googleapis.com/v1/accounts:${urlHost}?key=AIzaSyBS09uRrPhSS6CTOwNiihJgVnztvOv9nDk');
 
     try {
       final response = await http.post(
