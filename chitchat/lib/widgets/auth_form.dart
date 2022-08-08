@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  void Function(
-    String _userEmail,
-    String _userPassword,
-    String _userName,
-    bool _isLogin,
-  ) _submitFn;
-  AuthForm(this._submitFn);
+  void Function(String _userEmail, String _userPassword, String _userName,
+      bool _isLogin, BuildContext ctx) _submitFn;
+  bool isLoading;
+  AuthForm(this._submitFn, this.isLoading);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -27,8 +24,13 @@ class _AuthFormState extends State<AuthForm> {
     if (isValid) {
       _formKey.currentState.save();
       //Now send values to firebase for authentcation
-      widget._submitFn(_userEmail, _userPassword, _userName, _isLogin);
-     
+      widget._submitFn(
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName.trim(),
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -90,14 +92,18 @@ class _AuthFormState extends State<AuthForm> {
                   const SizedBox(
                     height: 12,
                   ),
-                  RaisedButton(
-                      onPressed: _trySubmit,
-                      child: Text(_isLogin ? 'Login' : 'Sign Up')),
+                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (!widget.isLoading)
+                    RaisedButton(
+                        onPressed: _trySubmit,
+                        child: Text(_isLogin ? 'Login' : 'Sign Up')),
                   //ElevatedButton(onPressed: () {}, child: Text('Login')),
+
                   TextButton(
                       onPressed: () {
                         setState(() {
                           _isLogin = !_isLogin;
+                          widget.isLoading = !widget.isLoading;
                         });
                       },
                       child: Text(_isLogin ? 'Sign Up' : 'Login')),
