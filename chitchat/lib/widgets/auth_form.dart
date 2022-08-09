@@ -103,7 +103,7 @@ class _AuthFormState extends State<AuthForm> {
                       onPressed: () {
                         setState(() {
                           _isLogin = !_isLogin;
-                          widget.isLoading = !widget.isLoading;
+                          // widget.isLoading = !widget.isLoading;
                         });
                       },
                       child: Text(_isLogin ? 'Sign Up' : 'Login')),

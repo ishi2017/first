@@ -26,6 +26,7 @@ class _AuthScreenState extends State<AuthScreen> {
           email: _userEmail,
           password: _userPassword,
         );
+        print(authResult.user.email);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
           email: _userEmail,
@@ -47,11 +48,11 @@ class _AuthScreenState extends State<AuthScreen> {
       Scaffold.of(ctx).showSnackBar(
         SnackBar(
           content: Text(message),
-          //backgroundColor: Theme.of(ctx).errorColor,
+          backgroundColor: Theme.of(ctx).errorColor,
         ),
       );
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
     } catch (err) {
       print(err);
@@ -62,7 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       );
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
     }
   }
@@ -71,7 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(_submit,_isLoading),
+      body: AuthForm(_submit, _isLoading),
     );
   }
 }
