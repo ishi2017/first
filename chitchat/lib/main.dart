@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,17 @@ class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
 
   // This widget is the root of your application.
+
+  void _userInfo(final snapshot) async {
+    final username = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(snapshot.data.uid)
+        .get();
+    print(username['username']);
+
+    //return username['username'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,7 +52,8 @@ class MyApp extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return ChatScreen();
+            //_userInfo(snapshot);
+            return const ChatScreen();
           } else {
             return const AuthScreen();
           }

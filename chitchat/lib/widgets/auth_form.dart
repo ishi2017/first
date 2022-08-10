@@ -1,8 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import '../widgets/user_image.dart';
 
 class AuthForm extends StatefulWidget {
-  void Function(String _userEmail, String _userPassword, String _userName,
-      bool _isLogin, BuildContext ctx) _submitFn;
+  void Function(
+    String _userEmail,
+    String _userPassword,
+    String _userName,
+    File _profileImg,
+    bool _isLogin,
+    BuildContext ctx,
+  ) _submitFn;
   bool isLoading;
   AuthForm(this._submitFn, this.isLoading);
 
@@ -16,18 +24,32 @@ class _AuthFormState extends State<AuthForm> {
   String _userName = '';
   String _userPassword = '';
   var _isLogin = true;
+  File _profileImg;
+
+  void _pickedImage(File pickedImage) {
+    _profileImg = pickedImage;
+  }
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
 
     FocusScope.of(context).unfocus();
-    if (isValid) {
+    if (_profileImg == null) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: const Text('Pick Profile Image !'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+
+      return;
+    }
+    if (isValid && !_isLogin) {
       _formKey.currentState.save();
       //Now send values to firebase for authentcation
       widget._submitFn(
         _userEmail.trim(),
         _userPassword.trim(),
         _userName.trim(),
+        _profileImg,
         _isLogin,
         context,
       );
@@ -47,6 +69,10 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  if (!_isLogin)
+                    UserImagePicker(
+                      pickedImage: _pickedImage,
+                    ),
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (value) {
