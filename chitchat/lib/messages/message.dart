@@ -37,6 +37,7 @@ class Message extends StatelessWidget {
                       key: ValueKey(
                         document[index].id,
                       ),
+                      img: document[index]['user_img'],
                     ),
                   );
                 }),

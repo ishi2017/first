@@ -22,9 +22,13 @@ class _NewMessageState extends State<NewMessage> {
       'text': _enteredValue,
       'createdAt': Timestamp.now(),
       'userID': user.uid,
-      'userName': username['username']
+      'userName': username['username'],
+      'user_img': username['user_img']
     });
-    _controller.clear();
+    setState(() {
+      _controller.clear();
+      _enteredValue = '';
+    });
   }
 
   @override

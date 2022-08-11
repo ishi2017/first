@@ -34,7 +34,7 @@ class _AuthScreenState extends State<AuthScreen> {
           email: _userEmail,
           password: _userPassword,
         );
-        print(authResult.user.email);
+        // print(authResult.user.email);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
           email: _userEmail,
@@ -44,13 +44,16 @@ class _AuthScreenState extends State<AuthScreen> {
             .ref()
             .child('User_Images')
             .child('${authResult.user.uid}.jpg');
+
         await ref.putFile(profileImg);
+        final image_url = await ref.getDownloadURL();
         FirebaseFirestore.instance
             .collection('user')
             .doc(authResult.user.uid)
             .set({
           'username': _userName,
           'email': _userEmail,
+          'user_img': image_url
         });
       }
     } on PlatformException catch (err) {
@@ -68,7 +71,6 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      print(err);
       Scaffold.of(ctx).showSnackBar(
         SnackBar(
           content: Text(err.message),

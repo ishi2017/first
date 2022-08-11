@@ -34,15 +34,30 @@ class _AuthFormState extends State<AuthForm> {
     final isValid = _formKey.currentState.validate();
 
     FocusScope.of(context).unfocus();
-    if (_profileImg == null) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: const Text('Pick Profile Image !'),
-        backgroundColor: Theme.of(context).errorColor,
-      ));
+    if (!_isLogin) {
+      if (_profileImg == null) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: const Text('Pick Profile Image !'),
+          backgroundColor: Theme.of(context).errorColor,
+        ));
 
-      return;
+        return;
+      }
     }
+
     if (isValid && !_isLogin) {
+      _formKey.currentState.save();
+      //Now send values to firebase for authentcation
+      widget._submitFn(
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName.trim(),
+        _profileImg,
+        _isLogin,
+        context,
+      );
+    }
+    if (_isLogin) {
       _formKey.currentState.save();
       //Now send values to firebase for authentcation
       widget._submitFn(

@@ -2,12 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../screen/chat.dart';
 import '../screen/auth.dart';
+
+Future<void> _onBackgroundMessage(RemoteMessage msg) async {
+  await Firebase.initializeApp();
+
+  print("onBackgroundMessage: ${msg}");
+  print("onBackgroundMessage.data: ${msg.data}");
+  print("onBackgroundMessage.notification.title: ${msg.notification?.title}");
+  print("onBackgroundMessage.notification.body: ${msg.notification?.body}");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+
   runApp(const MyApp());
 }
 
